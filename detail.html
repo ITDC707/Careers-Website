@@ -75,8 +75,9 @@
         <ul id="comp-benefits"></ul>
     </div>
 
-    <script>
+   <script>
         document.addEventListener("DOMContentLoaded", async () => {
+            // 從網址取得 id (例如：?id=usig)
             const urlParams = new URLSearchParams(window.location.search);
             const compId = urlParams.get('id');
 
@@ -86,13 +87,17 @@
             }
 
             try {
-                // 直接去 data 資料夾拿該公司的 JSON
+                // 💡 核心改動：直接發送 fetch 請求去 data/ 資料夾抓取對應的 json 檔案！
                 const response = await fetch(`./data/${compId}.json`);
-                if (!response.ok) throw new Error("找不到該企業的詳細檔案");
                 
+                if (!response.ok) {
+                    throw new Error("找不到該企業的獨立資料檔案");
+                }
+                
+                // 解析單一公司的詳細資料
                 const currentCompany = await response.json();
 
-                // 填入資料
+                // 把資料塞進 HTML 欄位中
                 document.getElementById("comp-name").innerText = currentCompany.name;
                 document.getElementById("comp-logo").src = "./images/" + currentCompany.logo;
                 document.getElementById("comp-intro").innerText = currentCompany.intro || "暫無簡介";
@@ -100,27 +105,34 @@
                 // 渲染職缺標籤
                 const jobsContainer = document.getElementById("comp-jobs");
                 jobsContainer.innerHTML = "";
-                if(currentCompany.jobs && currentCompany.jobs.length > 0) {
+                
+                if (currentCompany.jobs && currentCompany.jobs.length > 0) {
                     currentCompany.jobs.forEach(job => {
-                        jobsContainer.innerHTML += `<span class="job-tag">${job}</span>`;
+                        // 💡 因為你 usig.json 裡的 jobs 格式是物件 [{title: "..."}]
+                        // 這裡我們要取 job.title 才能正確顯示文字喔！
+                        const jobTitle = typeof job === 'object' ? job.title : job;
+                        jobsContainer.innerHTML += `<span class="job-tag">${jobTitle}</span>`;
                     });
-                } else { jobsContainer.innerText = "目前暫無職缺"; }
+                } else { 
+                    jobsContainer.innerText = "目前暫無職缺"; 
+                }
 
                 // 渲染福利列表
                 const benefitsContainer = document.getElementById("comp-benefits");
                 benefitsContainer.innerHTML = "";
-                if(currentCompany.benefits && currentCompany.benefits.length > 0) {
+                if (currentCompany.benefits && currentCompany.benefits.length > 0) {
                     currentCompany.benefits.forEach(b => {
                         benefitsContainer.innerHTML += `<li>${b}</li>`;
                     });
-                } else { benefitsContainer.innerHTML = "<li>基本勞健保</li>"; }
+                } else { 
+                    benefitsContainer.innerHTML = "<li>基本勞健保與健全制度</li>"; 
+                }
                 
             } catch (error) {
-                console.error(error);
+                console.error("內頁載入錯誤:", error);
                 document.getElementById("comp-name").innerText = "找不到該企業資訊";
-                document.getElementById("comp-intro").innerText = "請確認 data/ 資料夾下是否有對應的 JSON 檔案。";
+                document.getElementById("comp-intro").innerText = "請確認 data/ 資料夾下是否有對應正確的 JSON 檔案。";
             }
         });
     </script>
-</body>
 </html>
