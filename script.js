@@ -24,18 +24,16 @@ function renderCompanyGrid(list) {
         const card = document.createElement("div");
         card.className = "company-card";
         
-        // 點擊卡片時，將公司的 id 帶去給 detail.html
+        // 點擊卡片時，將公司的 id 帶給 detail.html
         card.onclick = () => {
             window.location.href = `detail.html?id=${company.id}`;
         };
 
         const fullLogoPath = IMAGE_BASE_PATH + company.logo;
 
-        // 💡 最乾淨的結構，完全交給 style.css 控制
+        // 生成最簡單、完全交給 CSS 強制管理的結構
         card.innerHTML = `
-            <div class="card-logo">
-                <img src="${fullLogoPath}" alt="${company.name} Logo">
-            </div>
+            <img src="${fullLogoPath}" alt="${company.name} Logo" class="company-logo-img">
             <h3 class="card-title">${company.name}</h3>
             <div class="card-footer">查看職缺 →</div>
         `;
