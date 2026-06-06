@@ -1,12 +1,77 @@
-/* --- 針對真實圖片 Logo 的優化樣式 --- */
+/* --- 基礎全域設定 --- */
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f7f6; /* 舒服的淺灰背景 */
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); /* 專業藍色漸層 */
+    color: white;
+}
+
+header h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.5rem;
+}
+
+header p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* --- 核心：CSS Grid 網格佈局（這行是卡片並排的關鍵！） --- */
+.grid-container {
+    display: grid;
+    /* 自動填滿，每張卡片寬度至少 280px，剩下的自動平分並排 */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    gap: 30px; /* 卡片之間的左右與上下間距 */
+}
+
+/* --- 企業卡片基礎樣式 --- */
+.company-card {
+    background-color: white;
+    border-radius: 12px; /* 現代感圓角 */
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* 微弱的精緻陰影 */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 讓內容與「查看職缺」完美拉開距離 */
+    min-height: 250px; /* 限制卡片最低高度，看起來更整齊 */
+    cursor: pointer;
+    
+    /* 懸停平滑動畫 */
+    transition: all 0.3s ease; 
+    position: relative;
+    top: 0;
+}
+
+/* --- 滑鼠懸停（Hover）特效 --- */
+.company-card:hover {
+    top: -8px; /* 卡片微微向上飄浮 */
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15); /* 陰影加深，產生立體感 */
+}
+
+/* --- Logo 區塊優化（強迫圖片乖乖聽話，不撐爆卡片） --- */
 .card-logo-container {
     width: 100%;
-    height: 120px; /* 固定 Logo 區域的高度 */
+    height: 100px; /* 固定 Logo 區域的高度 */
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
-    background-color: #fafafa; /* 給圖片一個淡淡的背景座，沒圖片時也不會空空的 */
+    margin-bottom: 15px;
+    background-color: #fafafa; /* 給圖片一個淡淡的背景座 */
     border-radius: 8px;
     overflow: hidden;
     padding: 10px;
@@ -16,11 +81,29 @@
 .company-logo-img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; /* 關鍵：確保圖片比例不變形，自動縮放到合適大小 */
+    object-fit: contain; /* 確保圖片不變形，自動縮放 */
 }
 
-/* 讓標題在卡片中置中，視覺更平衡 */
+/* 企業名稱置中與顏色樣式 */
 .company-card .card-title {
     text-align: center;
     margin: 10px 0 20px 0;
+    font-size: 1.2rem;
+    color: #1e3c72;
+    line-height: 1.4;
+}
+
+/* 卡片底部的提示字（查看職缺） */
+.card-footer {
+    font-size: 0.9rem;
+    color: #2a5298;
+    font-weight: bold;
+    text-align: right;
+    margin-top: auto; /* 確保不管字數多少，都在最底下 */
+    transition: transform 0.3s ease;
+}
+
+/* 當卡片被 Hover 時，底部的箭頭稍微往右邊動一下 */
+.company-card:hover .card-footer {
+    transform: translateX(5px);
 }
