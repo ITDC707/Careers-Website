@@ -1,7 +1,7 @@
 // 1. 在最上方統一設定圖片資料夾的路徑
 // 如果在同一個資料夾，就保持 "./"
 // 如果你建了一個叫 images 的資料夾，就改成 "./images/"
-const IMAGE_BASE_PATH = "./images/"; 
+const IMAGE_BASE_PATH = "E:\114學年度\網頁\index\Careers-Website"; 
 
 // 2. 企業資料陣列：此時 logo 欄位只需要寫「純檔名」
 const companies = [
