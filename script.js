@@ -31,10 +31,10 @@ function renderCompanyGrid(list) {
 
         const fullLogoPath = IMAGE_BASE_PATH + company.logo;
 
-        // 💡 這裡還原成你最初最乾淨的結構，把干擾大小的 style 全部拿掉
+        // 💡 最乾淨的結構，完全交給 style.css 控制
         card.innerHTML = `
             <div class="card-logo">
-                <img src="${fullLogoPath}" alt="${company.name} Logo" class="company-logo-img">
+                <img src="${fullLogoPath}" alt="${company.name} Logo">
             </div>
             <h3 class="card-title">${company.name}</h3>
             <div class="card-footer">查看職缺 →</div>
