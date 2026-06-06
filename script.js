@@ -1,6 +1,6 @@
 const IMAGE_BASE_PATH = "./images/"; 
 
-// 異步讀取瘦身版 companies.json 清單並渲染主頁
+// 異步讀取 companies.json 清單並渲染主頁
 async function loadCompanyList() {
     try {
         const response = await fetch('./companies.json');
@@ -16,7 +16,7 @@ async function loadCompanyList() {
 // 渲染主網頁卡片的邏輯
 function renderCompanyGrid(list) {
     const gridContainer = document.getElementById("company-grid");
-    if (!gridContainer) return; // 如果不是在主頁，就直接跳出
+    if (!gridContainer) return; 
     
     gridContainer.innerHTML = ""; 
 
@@ -31,12 +31,12 @@ function renderCompanyGrid(list) {
 
         const fullLogoPath = IMAGE_BASE_PATH + company.logo;
 
-        // 💡 這裡換回符合你原本 style.css 命名的 .card-logo 結構
+        // 💡 這裡還原成你最初最乾淨的結構，把干擾大小的 style 全部拿掉
         card.innerHTML = `
             <div class="card-logo">
-                <img src="${fullLogoPath}" alt="${company.name} Logo" style="width: 50px; height: 50px; object-fit: contain; vertical-align: middle;">
+                <img src="${fullLogoPath}" alt="${company.name} Logo" class="company-logo-img">
             </div>
-            <h3 class="card-title" style="margin-top: 15px;">${company.name}</h3>
+            <h3 class="card-title">${company.name}</h3>
             <div class="card-footer">查看職缺 →</div>
         `;
 
