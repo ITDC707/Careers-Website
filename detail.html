@@ -5,60 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>企業詳細資訊</title>
     <link rel="stylesheet" href="style.css"> 
-    <style>
-        .detail-container {
-            max-width: 800px;
-            margin: 40px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .back-btn {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #2a5298;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .detail-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            border-bottom: 2px solid #eef2f7;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-        .detail-logo {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-        }
-        .section-title {
-            color: #1e3c72;
-            border-left: 4px solid #2a5298;
-            padding-left: 10px;
-            margin-top: 30px;
-            font-size: 1.3rem;
-        }
-        .job-tag {
-            display: inline-block;
-            background-color: #eef2f7;
-            color: #1e3c72;
-            padding: 5px 15px;
-            border-radius: 6px;
-            margin: 5px;
-            font-weight: bold;
-        }
-        .meta-info p {
-            margin: 10px 0;
-            line-height: 1.6;
-        }
-        .meta-label {
-            font-weight: bold;
-            color: #1e3c72;
-        }
-    </style>
 </head>
 <body>
 
@@ -95,14 +41,14 @@
             }
 
             try {
-                // 💡 使用最乾淨的同層相對路徑，只要 Live Server 開在 Careers-Website 就絕對讀得到！
+                // 💡 使用最標準的同層相對路徑，輕鬆獲取 data 資料夾內對應的 json 檔案
                 const response = await fetch(`./data/${compId}.json`);
                 
                 if (!response.ok) throw new Error("找不到該企業的 JSON 檔案");
                 
                 const currentCompany = await response.json();
 
-                // 填入基本欄位
+                // 填入所有基本與詳細欄位
                 document.getElementById("comp-name").innerText = currentCompany.name;
                 document.getElementById("comp-logo").src = "images/" + currentCompany.logo;
                 document.getElementById("comp-intro").innerText = currentCompany.intro || "暫無簡介";
@@ -111,7 +57,7 @@
                 document.getElementById("comp-skill").innerText = currentCompany.basicSkill || "未特別註明";
                 document.getElementById("comp-overseas").innerText = currentCompany.overseasAdvice || "未特別註明";
 
-                // 渲染職缺
+                // 渲染職缺標籤
                 const jobsContainer = document.getElementById("comp-jobs");
                 jobsContainer.innerHTML = "";
                 
