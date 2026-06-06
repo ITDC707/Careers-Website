@@ -51,16 +51,16 @@
             }
 
             try {
-                // 💡 回歸最穩定的同層相對路徑請求法
+                // 💡 精確抓取全小寫 data 資料夾底下的 json 檔案
                 const response = await fetch(`./data/${compId}.json`);
                 
                 if (!response.ok) {
-                    throw new Error(`無法讀取 ./data/${compId}.json，伺服器回傳狀態: ${response.status}`);
+                    throw new Error(`找不到 ./data/${compId}.json 檔案`);
                 }
                 
                 const currentCompany = await response.json();
 
-                // 填入資料
+                // 將 JSON 欄位寫入對應的 HTML 節點
                 document.getElementById("comp-name").innerText = currentCompany.name;
                 document.getElementById("comp-logo").src = "images/" + currentCompany.logo;
                 document.getElementById("comp-intro").innerText = currentCompany.intro || "暫無簡介";
@@ -69,7 +69,7 @@
                 document.getElementById("comp-skill").innerText = currentCompany.basicSkill || "未特別註明";
                 document.getElementById("comp-overseas").innerText = currentCompany.overseasAdvice || "未特別註明";
 
-                // 渲染職缺
+                // 渲染職缺標籤
                 const jobsContainer = document.getElementById("comp-jobs");
                 jobsContainer.innerHTML = "";
                 
@@ -85,7 +85,7 @@
             } catch (error) {
                 console.error("內頁抓取錯誤:", error);
                 document.getElementById("comp-name").innerText = "找不到該企業資訊";
-                document.getElementById("comp-intro").innerHTML = `錯誤原因：網頁發出請求去抓 JSON 檔，但伺服器回報找不到檔案。<br><br>請檢查：你的 <b>${compId}.json</b> 檔案是否真的放在 <b>data</b> 資料夾內？且資料夾和檔案名稱是否全小寫？`;
+                document.getElementById("comp-intro").innerHTML = `錯誤原因：找不到該企業的 JSON 檔案。<br><br>請至 VS Code 左側檢查：你的 <b>data</b> 資料夾內是否確實含有 <b>${compId}.json</b>（必須全小寫）？`;
             }
         });
     </script>
