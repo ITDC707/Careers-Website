@@ -1,3 +1,43 @@
+/* 全域重設，確保各瀏覽器長得一樣 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    padding: 20px;
+}
+
+/* 頂部標題區塊 */
+header {
+    text-align: center;
+    margin: 40px 0;
+}
+
+header h1 {
+    color: #1e3c72;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+/* 九宮格容器 */
+#company-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ===================================================
+   🎯 核心修正：企業卡片與 Logo 視覺完美平衡排版
+   =================================================== */
+
 /* 企業卡片整體的設定 */
 .company-card {
     background: white;
@@ -11,79 +51,32 @@
     text-align: center;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    height: 280px; /* 固定整張卡片高度，讓九宮格完美對齊 */
+    height: 280px; /* 🎯 規定所有卡片高度一模一樣，格子絕對對齊 */
+}
+
+.company-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 /* 🎯 統一 Logo 外框的形狀與高度 */
 .card-logo {
-    width: 100%;       /* 撐滿卡片寬度 */
-    height: 100px;     /* 關鍵：強行規定所有 Logo 容器最高只能 100px */
+    width: 100%;       
+    height: 110px;     /* 🎯 限制所有圖片的容器最高就是 110px */
     display: flex;
-    align-items: center;     /* 垂直居中 */
-    justify-content: center;   /* 水平居中 */
+    align-items: center;     /* 垂直置中 */
+    justify-content: center;   /* 水平置中 */
     margin-bottom: 15px;
-    overflow: hidden;  /* 超出框框的直接隱藏 */
+    background-color: #ffffff;
 }
 
-/* 🎯 強行馴服所有不同比例的圖片 */
+/* 🎯 視覺平衡絕招：馴服大胖子圖，拯救瘦子圖 */
 .card-logo img {
-    max-width: 95%;    /* 寬度最多佔外框的 95%，留點舒適的呼吸空間 */
-    max-height: 95%;   /* 高度最多佔外框的 95% */
-    width: auto;       /* 自動維持原始比例 */
-    height: auto;      /* 自動維持原始比例 */
-    object-fit: contain; /* 終極防護：自動縮放到格子能容納的最完美大小 */
+    max-width: 65%;    /* 🎯 關鍵！從 95% 狠狠砍到 65%！這樣正方形的大圖就會自動縮小，不會顯得像巨無霸 */
+    max-height: 85%;   /* 高度限制在 85%，防止長度爆框 */
+    width: auto;       /* 維持完美黃金比例，絕對不拉伸、不壓扁 */
+    height: auto;      
+    object-fit: contain; 
 }
 
-/* 如果需要，也可以補上內頁基礎樣式，讓整體感更一致 */
-.detail-container {
-    max-width: 800px;
-    margin: 40px auto;
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-.back-btn {
-    display: inline-block;
-    margin-bottom: 20px;
-    color: #2a5298;
-    text-decoration: none;
-    font-weight: bold;
-}
-.detail-header {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    border-bottom: 2px solid #eef2f7;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
-}
-.detail-logo {
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
-}
-.section-title {
-    color: #1e3c72;
-    border-left: 4px solid #2a5298;
-    padding-left: 10px;
-    margin-top: 30px;
-    font-size: 1.3rem;
-}
-.job-tag {
-    display: inline-block;
-    background-color: #eef2f7;
-    color: #1e3c72;
-    padding: 5px 15px;
-    border-radius: 6px;
-    margin: 5px;
-    font-weight: bold;
-}
-.meta-info p {
-    margin: 10px 0;
-    line-height: 1.6;
-}
-.meta-label {
-    font-weight: bold;
-    color: #1e3c72;
-}
+/* 卡
