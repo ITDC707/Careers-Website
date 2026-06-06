@@ -1,4 +1,4 @@
-/* 全域重設 */
+/* 全域重設，確保各瀏覽器外觀一致 */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -12,6 +12,7 @@ body {
     padding: 20px;
 }
 
+/* 頂部標題 */
 header {
     text-align: center;
     margin: 40px 0;
@@ -34,10 +35,10 @@ header h1 {
 }
 
 /* ===================================================
-   🎯 核心修正：直接強制限制卡片與圖片高度
+   🎯 核心修正：企業卡片與 Logo 尺寸完美齊一
    =================================================== */
 
-/* 企業卡片整體 */
+/* 企業卡片整體外框 */
 .company-card {
     background: white;
     border-radius: 12px;
@@ -50,7 +51,7 @@ header h1 {
     text-align: center;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    height: 300px; /* 🎯 強制所有卡片高度整齊劃一 */
+    height: 300px; /* 固定所有卡片高度，讓九宮格完美對齊 */
 }
 
 .company-card:hover {
@@ -58,11 +59,11 @@ header h1 {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
-/* 🎯 關鍵：不論你 JavaScript 怎麼寫，直接把抓出來的圖片鎖死在 90px 高度內 */
+/* 🎯 關鍵修正：強制控制由 JS 產生的圖片大小與比例 */
 .company-card img {
-    height: 90px !important;    /* 🎯 強制所有 Logo 圖片高度最高就是 90px */
-    width: 80% !important;     /* 限制最大寬度，防止像和碩這種方圖橫向爆開 */
-    object-fit: contain !important; /* 終極防護：等比例縮放，絕對不拉伸、不變形 */
+    height: 100px !important;    /* 強制所有 Logo 高度固定為 100px，不縮小也不爆框 */
+    width: 85% !important;      /* 寬度上限限制在 85%，預留兩側舒適留白 */
+    object-fit: contain !important; /* 核心：等比例縮放，絕對不拉伸變形 */
     margin-bottom: 15px;
     display: block;
 }
