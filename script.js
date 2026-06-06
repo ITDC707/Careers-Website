@@ -24,7 +24,7 @@ function renderCompanyGrid(list) {
         const card = document.createElement("div");
         card.className = "company-card";
         
-        // 點擊卡片時，依然會把公司的 id 帶去給 detail.html
+        // 點擊卡片時，將公司的 id 帶去給 detail.html
         card.onclick = () => {
             window.location.href = `detail.html?id=${company.id}`;
         };
