@@ -1,0 +1,110 @@
+/* --- 基礎全域設定 --- */
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f7f6; /* 舒服的淺灰背景 */
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); /* 專業感的藍色漸層 */
+    color: white;
+}
+
+header h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.5rem;
+}
+
+header p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* --- 核心：CSS Grid 網格佈局 --- */
+.grid-container {
+    display: grid;
+    /* 自動填滿，每張卡片寬度至少 280px，剩下的平分 */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    gap: 30px; /* 卡片與卡片之間的間距 */
+}
+
+/* --- 企業卡片基礎樣式 --- */
+.company-card {
+    background-color: white;
+    border-radius: 12px; /* 圓角看起來比較有現代感 */
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* 微弱的陰影 */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    
+    /* 關鍵：設定平滑動畫，當樣式改變時（如 Hover）才不會太突兀 */
+    transition: all 0.3s ease; 
+    position: relative;
+    top: 0;
+}
+
+/* --- 互動：滑鼠懸停（Hover）特效 💡 --- */
+.company-card:hover {
+    top: -8px; /* 卡片微微向上飄浮 */
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15); /* 陰影加深，產生立體感 */
+    border-color: #2a5298;
+}
+
+/* --- 卡片內部細節樣式 --- */
+.card-logo {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.card-title {
+    margin: 0 0 10px 0;
+    font-size: 1.3rem;
+    color: #1e3c72;
+}
+
+/* 分類標籤 */
+.card-tag {
+    display: inline-block;
+    align-self: flex-start; /* 讓寬度貼合文字不爆開 */
+    background-color: #eef2f7;
+    color: #2a5298;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.card-desc {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+    flex-grow: 1; /* 讓文字自動撐開，確保按鈕都在最下方對齊 */
+}
+
+/* 卡片底部的提示字 */
+.card-footer {
+    font-size: 0.9rem;
+    color: #2a5298;
+    font-weight: bold;
+    text-align: right;
+    transition: transform 0.3s ease;
+}
+
+/* 當卡片被 Hover 時，底部的箭頭稍微往右邊動一下 */
+.company-card:hover .card-footer {
+    transform: translateX(5px);
+}
