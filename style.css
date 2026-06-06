@@ -1,4 +1,4 @@
-/* 全域重設，確保各瀏覽器長得一樣 */
+/* 全域重設 */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -12,7 +12,6 @@ body {
     padding: 20px;
 }
 
-/* 頂部標題區塊 */
 header {
     text-align: center;
     margin: 40px 0;
@@ -35,10 +34,10 @@ header h1 {
 }
 
 /* ===================================================
-   🎯 核心修正：企業卡片與 Logo 視覺完美平衡排版
+   🎯 核心修正：直接強制限制卡片與圖片高度
    =================================================== */
 
-/* 企業卡片整體的設定 */
+/* 企業卡片整體 */
 .company-card {
     background: white;
     border-radius: 12px;
@@ -51,7 +50,7 @@ header h1 {
     text-align: center;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    height: 280px; /* 🎯 規定所有卡片高度一模一樣，格子絕對對齊 */
+    height: 300px; /* 🎯 強制所有卡片高度整齊劃一 */
 }
 
 .company-card:hover {
@@ -59,24 +58,26 @@ header h1 {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
-/* 🎯 統一 Logo 外框的形狀與高度 */
-.card-logo {
-    width: 100%;       
-    height: 110px;     /* 🎯 限制所有圖片的容器最高就是 110px */
-    display: flex;
-    align-items: center;     /* 垂直置中 */
-    justify-content: center;   /* 水平置中 */
+/* 🎯 關鍵：不論你 JavaScript 怎麼寫，直接把抓出來的圖片鎖死在 90px 高度內 */
+.company-card img {
+    height: 90px !important;    /* 🎯 強制所有 Logo 圖片高度最高就是 90px */
+    width: 80% !important;     /* 限制最大寬度，防止像和碩這種方圖橫向爆開 */
+    object-fit: contain !important; /* 終極防護：等比例縮放，絕對不拉伸、不變形 */
     margin-bottom: 15px;
-    background-color: #ffffff;
+    display: block;
 }
 
-/* 🎯 視覺平衡絕招：馴服大胖子圖，拯救瘦子圖 */
-.card-logo img {
-    max-width: 65%;    /* 🎯 關鍵！從 95% 狠狠砍到 65%！這樣正方形的大圖就會自動縮小，不會顯得像巨無霸 */
-    max-height: 85%;   /* 高度限制在 85%，防止長度爆框 */
-    width: auto;       /* 維持完美黃金比例，絕對不拉伸、不壓扁 */
-    height: auto;      
-    object-fit: contain; 
+/* 卡片標題與底部 */
+.card-title {
+    font-size: 1.15rem;
+    color: #1e3c72;
+    margin: 10px 0;
+    font-weight: 600;
 }
 
-/* 卡
+.card-footer {
+    font-size: 0.9rem;
+    color: #2a5298;
+    font-weight: bold;
+    margin-top: auto;
+}
