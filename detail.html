@@ -94,57 +94,42 @@
                 return;
             }
 
-            // 💡 為了防止你的資料夾層級在 VS Code Localhost 裡對錯，我們做 3 層路徑防呆嘗試！
-            const pathsToTry = [
-                `data/${compId}.json`,          // 嘗試 1：目前根目錄底下的 data/
-                `./data/${compId}.json`,        // 嘗試 2：相對路徑的 data/
-                `../data/${compId}.json`        // 嘗試 3：上一層目錄的 data/ (防呆外包層級)
-            ];
-
-            let response;
-            let currentCompany = null;
-
-            // 用迴圈去撞路徑，只要有一個撞對，資料就會出來！
-            for (let path of pathsToTry) {
-                try {
-                    console.log(`正在嘗試讀取路徑: ${path}`);
-                    const res = await fetch(path);
-                    if (res.ok) {
-                        currentCompany = await res.json();
-                        console.log(`✅ 成功在路徑 ${path} 找到檔案！`);
-                        break; 
-                    }
-                } catch (e) {
-                    // 目前這個路徑失敗，繼續試下一個
+            try {
+                // 💡 既然在 E:\website 根目錄了，直接用最正規乾淨的 data/ 絕對相對路徑！
+                const response = await fetch(`data/${compId}.json`);
+                
+                if (!response.ok) {
+                    throw new Error("找不到該企業的 JSON 檔案");
                 }
-            }
+                
+                const currentCompany = await response.json();
 
-            // 如果三條路都死掉了
-            if (!currentCompany) {
+                // 填入所有基本與詳細欄位
+                document.getElementById("comp-name").innerText = currentCompany.name;
+                document.getElementById("comp-logo").src = "images/" + currentCompany.logo;
+                document.getElementById("comp-intro").innerText = currentCompany.intro || "暫無簡介";
+                document.getElementById("comp-web").href = currentCompany.website || "#";
+                document.getElementById("comp-lang").innerText = currentCompany.langRequirement || "未特別註明";
+                document.getElementById("comp-skill").innerText = currentCompany.basicSkill || "未特別註明";
+                document.getElementById("comp-overseas").innerText = currentCompany.overseasAdvice || "未特別註明";
+
+                // 渲染職缺標籤
+                const jobsContainer = document.getElementById("comp-jobs");
+                jobsContainer.innerHTML = "";
+                
+                if (currentCompany.jobs && currentCompany.jobs.length > 0) {
+                    currentCompany.jobs.forEach(job => {
+                        const jobTitle = typeof job === 'object' ? (job.title || job.name) : job;
+                        jobsContainer.innerHTML += `<span class="job-tag">${jobTitle}</span>`;
+                    });
+                } else { 
+                    jobsContainer.innerText = "目前暫無職缺"; 
+                }
+                
+            } catch (error) {
+                console.error("內頁抓取錯誤:", error);
                 document.getElementById("comp-name").innerText = "找不到該企業資訊";
-                document.getElementById("comp-intro").innerHTML = `原因：網頁發出請求去抓 JSON 檔，但伺服器回報 404 找不到檔案。<br><br><b>請檢查：</b>你的 <b>usig.json</b> 檔案是否真的放在 <b>data</b> 資料夾內？且資料夾和檔案名稱是否全小寫？`;
-                return;
-            }
-
-            // 🎉 成功拿到資料，開始塞進 HTML
-            document.getElementById("comp-name").innerText = currentCompany.name;
-            document.getElementById("comp-logo").src = "images/" + currentCompany.logo;
-            document.getElementById("comp-intro").innerText = currentCompany.intro || "暫無簡介";
-            document.getElementById("comp-web").href = currentCompany.website || "#";
-            document.getElementById("comp-lang").innerText = currentCompany.langRequirement || "未特別註明";
-            document.getElementById("comp-skill").innerText = currentCompany.basicSkill || "未特別註明";
-            document.getElementById("comp-overseas").innerText = currentCompany.overseasAdvice || "未特別註明";
-
-            // 渲染職缺標籤
-            const jobsContainer = document.getElementById("comp-jobs");
-            jobsContainer.innerHTML = "";
-            if (currentCompany.jobs && currentCompany.jobs.length > 0) {
-                currentCompany.jobs.forEach(job => {
-                    const jobTitle = typeof job === 'object' ? (job.title || job.name) : job;
-                    jobsContainer.innerHTML += `<span class="job-tag">${jobTitle}</span>`;
-                });
-            } else { 
-                jobsContainer.innerText = "目前暫無職缺"; 
+                document.getElementById("comp-intro").innerText = "請確認 data/ 資料夾下是否有對應且格式正確的 JSON 檔案。";
             }
         });
     </script>
