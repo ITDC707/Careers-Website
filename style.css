@@ -1,117 +1,89 @@
-/* ==========================================================================
-   1. 基礎全域設定
-   ========================================================================== */
-body {
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f4f7f6; /* 舒服的淺灰背景 */
-    margin: 0;
-    padding: 0;
-    color: #333;
-}
-
-header {
-    text-align: center;
-    padding: 40px 20px;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); /* 專業藍色漸層 */
-    color: white;
-}
-
-header h1 {
-    margin: 0 0 10px 0;
-    font-size: 2.5rem;
-}
-
-header p {
-    margin: 0;
-    opacity: 0.9;
-}
-
-main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
-}
-
-/* ==========================================================================
-   2. 核心：CSS Grid 網格佈局（這行是卡片並排的關鍵！）
-   ========================================================================== */
-.grid-container {
-    display: grid;
-    /* 自動填滿，每張卡片寬度至少 280px，剩下的自動平分並排 */
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-    gap: 30px; /* 卡片之間的左右與上下間距 */
-}
-
-/* ==========================================================================
-   3. 企業卡片基礎樣式與 Hover 特效
-   ========================================================================== */
+/* 企業卡片整體的設定 */
 .company-card {
-    background-color: white;
-    border-radius: 12px; /* 現代感圓角 */
-    padding: 25px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* 微弱的精緻陰影 */
-    box-sizing: border-box;
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* 讓內容與「查看職缺」完美拉開距離 */
-    min-height: 250px; /* 限制卡片最低高度，看起來更整齊 */
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
     cursor: pointer;
-    
-    /* 懸停平滑動畫 */
-    transition: all 0.3s ease; 
-    position: relative;
-    top: 0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 280px; /* 固定整張卡片高度，讓九宮格完美對齊 */
 }
 
-/* 滑鼠懸停（Hover）特效 */
-.company-card:hover {
-    top: -8px; /* 卡片微微向上飄浮 */
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15); /* 陰影加深，產生立體感 */
+/* 🎯 統一 Logo 外框的形狀與高度 */
+.card-logo {
+    width: 100%;       /* 撐滿卡片寬度 */
+    height: 100px;     /* 關鍵：強行規定所有 Logo 容器最高只能 100px */
+    display: flex;
+    align-items: center;     /* 垂直居中 */
+    justify-content: center;   /* 水平居中 */
+    margin-bottom: 15px;
+    overflow: hidden;  /* 超出框框的直接隱藏 */
 }
 
-/* ==========================================================================
-   4. Logo 與文字細節優化（強迫圖片乖乖聽話）
-   ========================================================================== */
-.card-logo-container {
-    width: 100%;
-    height: 120px; /* 固定 Logo 區域的高度 */
+/* 🎯 強行馴服所有不同比例的圖片 */
+.card-logo img {
+    max-width: 95%;    /* 寬度最多佔外框的 95%，留點舒適的呼吸空間 */
+    max-height: 95%;   /* 高度最多佔外框的 95% */
+    width: auto;       /* 自動維持原始比例 */
+    height: auto;      /* 自動維持原始比例 */
+    object-fit: contain; /* 終極防護：自動縮放到格子能容納的最完美大小 */
+}
+
+/* 如果需要，也可以補上內頁基礎樣式，讓整體感更一致 */
+.detail-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #2a5298;
+    text-decoration: none;
+    font-weight: bold;
+}
+.detail-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    background-color: #fafafa; /* 給圖片一個淡淡的背景座，沒圖片時也不會空空的 */
-    border-radius: 8px;
-    overflow: hidden;
-    padding: 10px;
-    box-sizing: border-box;
+    gap: 20px;
+    border-bottom: 2px solid #eef2f7;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
 }
-
-.company-logo-img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* 關鍵：確保圖片比例不變形，自動縮放到合適大小 */
+.detail-logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
 }
-
-/* 讓標題在卡片中置中，視覺更平衡 */
-.company-card .card-title {
-    text-align: center;
-    margin: 10px 0 20px 0;
-    font-size: 1.2rem;
+.section-title {
     color: #1e3c72;
-    line-height: 1.4;
+    border-left: 4px solid #2a5298;
+    padding-left: 10px;
+    margin-top: 30px;
+    font-size: 1.3rem;
 }
-
-/* 卡片底部的提示字（查看職缺） */
-.card-footer {
-    font-size: 0.9rem;
-    color: #2a5298;
+.job-tag {
+    display: inline-block;
+    background-color: #eef2f7;
+    color: #1e3c72;
+    padding: 5px 15px;
+    border-radius: 6px;
+    margin: 5px;
     font-weight: bold;
-    text-align: right;
-    margin-top: auto; /* 確保不管字數多少，都在最底下 */
-    transition: transform 0.3s ease;
 }
-
-/* 當卡片被 Hover 時，底部的箭頭稍微往右邊動一下 */
-.company-card:hover .card-footer {
-    transform: translateX(5px);
+.meta-info p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+.meta-label {
+    font-weight: bold;
+    color: #1e3c72;
 }
