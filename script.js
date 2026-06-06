@@ -31,11 +31,12 @@ function renderCompanyGrid(list) {
 
         const fullLogoPath = IMAGE_BASE_PATH + company.logo;
 
+        // 💡 這裡換回符合你原本 style.css 命名的 .card-logo 結構
         card.innerHTML = `
-            <div class="card-logo-container">
-                <img src="${fullLogoPath}" alt="${company.name} Logo" class="company-logo-img">
+            <div class="card-logo">
+                <img src="${fullLogoPath}" alt="${company.name} Logo" style="width: 50px; height: 50px; object-fit: contain; vertical-align: middle;">
             </div>
-            <h3 class="card-title">${company.name}</h3>
+            <h3 class="card-title" style="margin-top: 15px;">${company.name}</h3>
             <div class="card-footer">查看職缺 →</div>
         `;
 
