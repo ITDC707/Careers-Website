@@ -1,3 +1,15 @@
+<script src="script.js"></script> ```
+當你點擊主頁卡片跳轉時，舊版的 `script.js` 一載入，它裡面的 `document.addEventListener("DOMContentLoaded", ...)` 就會**搶先執行**，並且因為在 `detail.html` 找不到 `#company-grid` 容器而卡住，或者干擾了你後面寫的讀取邏輯。
+
+既然你的 `data/usig.json` 已經乖乖躺在正確的資料夾裡了，我們現在只要讓 `detail.html` 徹底與舊時代告別，就能看到漂亮的內容了！
+
+---
+
+### 🛠️ 終極修復：把 `detail.html` 的內容整份換新
+
+請去 GitHub 打開 **`detail.html`**，點擊右上角的鉛筆編輯，把裡面的內容**全部清空**，一字不漏地換成下面這份完成體（已經幫你拔掉舊的 `script.js` 引用，並融合了最完美的非同步抓取邏輯）：
+
+```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -75,9 +87,9 @@
         <ul id="comp-benefits"></ul>
     </div>
 
-   <script>
+    <script>
         document.addEventListener("DOMContentLoaded", async () => {
-            // 1. 抓取網址上的 id (例如: ?id=usig)
+            // 1. 獲取網址參數 ?id=xxx
             const urlParams = new URLSearchParams(window.location.search);
             const compId = urlParams.get('id');
 
@@ -87,28 +99,26 @@
             }
 
             try {
-                // 💡 【核心修正】：後面一定要加上 .json！這樣才會去抓 ./data/usig.json
-                const response = await fetch(`./data/${compId}.json`);
+                // 2. 直接發送請求去 data 資料夾抓對應的獨立 json 檔案
+                const response = await fetch(`data/${compId}.json`);
                 
                 if (!response.ok) {
-                    throw new Error("找不到該企業的獨立資料檔案");
+                    throw new Error("找不到該企業的 JSON 檔案");
                 }
                 
-                // 解析該公司的詳細 JSON 資料
                 const currentCompany = await response.json();
 
-                // 2. 填入基礎欄位
+                // 3. 把資料寫入 HTML 欄位
                 document.getElementById("comp-name").innerText = currentCompany.name;
-                document.getElementById("comp-logo").src = "./images/" + currentCompany.logo;
+                document.getElementById("comp-logo").src = "images/" + currentCompany.logo;
                 document.getElementById("comp-intro").innerText = currentCompany.intro || "暫無簡介";
 
-                // 3. 渲染開放職缺標籤
+                // 4. 渲染職缺標籤 (相容物件格式與字串格式)
                 const jobsContainer = document.getElementById("comp-jobs");
                 jobsContainer.innerHTML = "";
                 
                 if (currentCompany.jobs && currentCompany.jobs.length > 0) {
                     currentCompany.jobs.forEach(job => {
-                        // 防呆機制：相容你的 JSON 格式 (不論是字串還是物件都能正確抓出文字)
                         const jobTitle = typeof job === 'object' ? (job.title || job.name) : job;
                         jobsContainer.innerHTML += `<span class="job-tag">${jobTitle}</span>`;
                     });
@@ -116,7 +126,7 @@
                     jobsContainer.innerText = "目前暫無職缺"; 
                 }
 
-                // 4. 渲染福利列表
+                // 5. 渲染福利列表 (若無則顯示基本勞健保)
                 const benefitsContainer = document.getElementById("comp-benefits");
                 benefitsContainer.innerHTML = "";
                 if (currentCompany.benefits && currentCompany.benefits.length > 0) {
@@ -128,10 +138,11 @@
                 }
                 
             } catch (error) {
-                console.error("內頁載入失敗:", error);
+                console.error("內頁載入錯誤:", error);
                 document.getElementById("comp-name").innerText = "找不到該企業資訊";
-                document.getElementById("comp-intro").innerText = "請確認 data/ 資料夾下是否有對應且格式正確的 JSON 檔案。";
+                document.getElementById("comp-intro").innerText = "請確認 data/ 資料夾下是否有對應正確的 JSON 檔案。";
             }
         });
     </script>
+</body>
 </html>
