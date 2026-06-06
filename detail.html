@@ -1,15 +1,3 @@
-<script src="script.js"></script> ```
-當你點擊主頁卡片跳轉時，舊版的 `script.js` 一載入，它裡面的 `document.addEventListener("DOMContentLoaded", ...)` 就會**搶先執行**，並且因為在 `detail.html` 找不到 `#company-grid` 容器而卡住，或者干擾了你後面寫的讀取邏輯。
-
-既然你的 `data/usig.json` 已經乖乖躺在正確的資料夾裡了，我們現在只要讓 `detail.html` 徹底與舊時代告別，就能看到漂亮的內容了！
-
----
-
-### 🛠️ 終極修復：把 `detail.html` 的內容整份換新
-
-請去 GitHub 打開 **`detail.html`**，點擊右上角的鉛筆編輯，把裡面的內容**全部清空**，一字不漏地換成下面這份完成體（已經幫你拔掉舊的 `script.js` 引用，並融合了最完美的非同步抓取邏輯）：
-
-```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -42,8 +30,8 @@
             margin-bottom: 30px;
         }
         .detail-logo {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             object-fit: contain;
         }
         .section-title {
@@ -51,6 +39,7 @@
             border-left: 4px solid #2a5298;
             padding-left: 10px;
             margin-top: 30px;
+            font-size: 1.3rem;
         }
         ul {
             padding-left: 20px;
@@ -65,6 +54,14 @@
             margin: 5px;
             font-weight: bold;
         }
+        .meta-info p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        .meta-label {
+            font-weight: bold;
+            color: #1e3c72;
+        }
     </style>
 </head>
 <body>
@@ -77,8 +74,15 @@
             <h1 id="comp-name">公司名稱載入中...</h1>
         </div>
 
+        <div class="meta-info">
+            <p><span class="meta-label">官方網站：</span><a id="comp-web" href="#" target="_blank">點擊前往</a></p>
+            <p><span class="meta-label">語言要求：</span><span id="comp-lang">載入中...</span></p>
+            <p><span class="meta-label">基本能力：</span><span id="comp-skill">載入中...</span></p>
+            <p><span class="meta-label">境外生建議：</span><span id="comp-overseas">載入中...</span></p>
+        </div>
+
         <h3 class="section-title">公司簡介</h3>
-        <p id="comp-intro" style="line-height: 1.6; color: #555;">載入中...</p>
+        <p id="comp-intro" style="line-height: 1.6; color: #555; white-space: pre-line;">載入中...</p>
 
         <h3 class="section-title">開放職缺</h3>
         <div id="comp-jobs"></div>
@@ -89,7 +93,6 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
-            // 1. 獲取網址參數 ?id=xxx
             const urlParams = new URLSearchParams(window.location.search);
             const compId = urlParams.get('id');
 
@@ -99,24 +102,24 @@
             }
 
             try {
-                // 2. 直接發送請求去 data 資料夾抓對應的獨立 json 檔案
+                // 💡 正確請求 data 目錄下的 json 檔案
                 const response = await fetch(`data/${compId}.json`);
-                
-                if (!response.ok) {
-                    throw new Error("找不到該企業的 JSON 檔案");
-                }
+                if (!response.ok) throw new Error("找不到該企業的詳細檔案");
                 
                 const currentCompany = await response.json();
 
-                // 3. 把資料寫入 HTML 欄位
+                // 填入所有基本與詳細欄位 (現在 HTML 裡都有對應的 ID 了，絕對不會報錯！)
                 document.getElementById("comp-name").innerText = currentCompany.name;
                 document.getElementById("comp-logo").src = "images/" + currentCompany.logo;
                 document.getElementById("comp-intro").innerText = currentCompany.intro || "暫無簡介";
+                document.getElementById("comp-web").href = currentCompany.website || "#";
+                document.getElementById("comp-lang").innerText = currentCompany.langRequirement || "未特別註明";
+                document.getElementById("comp-skill").innerText = currentCompany.basicSkill || "未特別註明";
+                document.getElementById("comp-overseas").innerText = currentCompany.overseasAdvice || "未特別註明";
 
-                // 4. 渲染職缺標籤 (相容物件格式與字串格式)
+                // 渲染職缺標籤
                 const jobsContainer = document.getElementById("comp-jobs");
                 jobsContainer.innerHTML = "";
-                
                 if (currentCompany.jobs && currentCompany.jobs.length > 0) {
                     currentCompany.jobs.forEach(job => {
                         const jobTitle = typeof job === 'object' ? (job.title || job.name) : job;
@@ -126,7 +129,7 @@
                     jobsContainer.innerText = "目前暫無職缺"; 
                 }
 
-                // 5. 渲染福利列表 (若無則顯示基本勞健保)
+                // 渲染福利列表
                 const benefitsContainer = document.getElementById("comp-benefits");
                 benefitsContainer.innerHTML = "";
                 if (currentCompany.benefits && currentCompany.benefits.length > 0) {
@@ -134,15 +137,13 @@
                         benefitsContainer.innerHTML += `<li>${b}</li>`;
                     });
                 } else { 
-                    benefitsContainer.innerHTML = "<li>基本勞健保與健全制度</li>"; 
+                    benefitsContainer.innerHTML = "<li>基本勞健保</li>"; 
                 }
                 
             } catch (error) {
-                console.error("內頁載入錯誤:", error);
+                console.error("內頁抓取錯誤:", error);
                 document.getElementById("comp-name").innerText = "找不到該企業資訊";
-                document.getElementById("comp-intro").innerText = "請確認 data/ 資料夾下是否有對應正確的 JSON 檔案。";
+                document.getElementById("comp-intro").innerText = "請確認 data/ 資料夾下是否有對應且格式正確的 JSON 檔案。";
             }
         });
     </script>
-</body>
-</html>
