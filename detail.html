@@ -70,7 +70,7 @@
             color: white;
         }
 
-        /* 🎯 應徵方式區塊樣式 */
+        /* 應徵方式區塊樣式 */
         .apply-box {
             background-color: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -150,7 +150,6 @@
         <h3 class="section-title">徵才職缺 (實習)</h3>
         <div id="comp-intern-jobs"></div>
 
-        <!-- 💡 應徵方式區塊：預設隱藏，有職缺且有網址時才透過 JS 顯示 -->
         <div id="row-apply" class="apply-box" style="display: none;">
             <h3 style="color: #1e3c72; margin-top: 0; margin-bottom: 10px;">📩 應徵方式</h3>
             <p style="margin: 0; color: #555; line-height: 1.6;">
@@ -231,21 +230,30 @@
                 if (currentCompany.jobs && currentCompany.jobs.length > 0) {
                     hasJobs = true;
                     currentCompany.jobs.forEach(job => {
-                        const jobTitle = typeof job === 'object' ? (job.title || job.name) : job;
+                        const originalTitle = typeof job === 'object' ? (job.title || job.name) : job;
                         const jobDesc = typeof job === 'object' ? (job.desc || job.description) : "歡迎具備相關能力者前來投遞！";
                         
+                        // 🎯 1. 先用原始職稱判斷分類（因為原始職稱含有「實習」或「助理」關鍵字）
+                        const lowerTitle = originalTitle.toLowerCase();
+                        const isInternship = lowerTitle.includes("實習") || lowerTitle.includes("助理") || lowerTitle.includes("intern");
+
+                        // 🎯 2. 優化顯示名稱：如果職稱開頭有 "[長期實習]" 或 "【長期實習】"，我們在網頁畫面上把它剃除掉
+                        let displayTitle = originalTitle.replace(/^\[長期實習\]\s*/, "");
+                        displayTitle = displayTitle.replace(/^【長期實習】\s*/, "");
+
                         const btn = document.createElement("button");
                         btn.className = "job-button";
-                        btn.innerText = jobTitle;
+                        btn.innerText = displayTitle; // 畫面上顯示乾淨的職稱
                         
                         btn.onclick = () => {
-                            document.getElementById("modal-job-title").innerText = jobTitle;
+                            // 彈出視窗也顯示乾淨職稱
+                            document.getElementById("modal-job-title").innerText = displayTitle;
                             document.getElementById("modal-job-desc").innerText = jobDesc;
                             document.getElementById("jobModal").style.display = "flex";
                         };
 
-                        const lowerTitle = jobTitle.toLowerCase();
-                        if (lowerTitle.includes("實習") || lowerTitle.includes("助理") || lowerTitle.includes("intern")) {
+                        // 3. 分流塞入對應的區塊
+                        if (isInternship) {
                             internContainer.appendChild(btn);
                         } else {
                             fulltimeContainer.appendChild(btn);
@@ -253,7 +261,7 @@
                     });
                 }
 
-                // 🎯 智慧應徵方式顯示邏輯：必須「有職缺」且「JSON 裡有提供 hrUrl 網址」才顯示
+                // 智慧應徵方式顯示邏輯
                 const applyRow = document.getElementById("row-apply");
                 if (hasJobs && currentCompany.hrUrl && currentCompany.hrUrl.trim() !== "") {
                     document.getElementById("comp-apply-btn").href = currentCompany.hrUrl;
