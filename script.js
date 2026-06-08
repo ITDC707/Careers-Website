@@ -31,9 +31,11 @@ function renderCompanyGrid(list) {
 
         const fullLogoPath = IMAGE_BASE_PATH + company.logo;
 
-        // 生成最簡單、完全交給 CSS 強制管理的結構
+        // 生成完美的結構，對齊 style.css 的進階容器樣式
         card.innerHTML = `
-            <img src="${fullLogoPath}" alt="${company.name} Logo" class="company-logo-img">
+            <div class="card-logo-container">
+                <img src="${fullLogoPath}" alt="${company.name} Logo" class="company-logo-img">
+            </div>
             <h3 class="card-title">${company.name}</h3>
             <div class="card-footer">查看職缺 →</div>
         `;
