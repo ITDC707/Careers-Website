@@ -73,10 +73,10 @@
         /* 應徵方式區塊樣式 */
         .apply-box {
             background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
+            border: 2px solid #2a5298; /* 加強邊框顏色 */
             padding: 25px;
             border-radius: 8px;
-            margin-top: 35px;
+            margin-top: 40px;
         }
         .apply-btn {
             display: inline-block;
@@ -88,7 +88,7 @@
             font-weight: bold;
             box-shadow: 0 4px 10px rgba(255,107,107,0.3);
             transition: all 0.2s ease;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         .apply-btn:hover {
             transform: translateY(-2px);
@@ -150,10 +150,11 @@
         <h3 class="section-title">徵才職缺 (實習)</h3>
         <div id="comp-intern-jobs"></div>
 
+        <!-- 💡 應徵方式區塊：有職缺時必定顯示 -->
         <div id="row-apply" class="apply-box" style="display: none;">
             <h3 style="color: #1e3c72; margin-top: 0; margin-bottom: 10px;">📩 應徵方式</h3>
-            <p style="margin: 0; color: #555; line-height: 1.6;">
-                請至 104 人力銀行投遞履歷，並於應徵時備註<strong>「中原大學校內徵才網上投遞」</strong>。
+            <p style="margin: 0; color: #333; line-height: 1.6; font-size: 1.05rem;">
+                請點擊下方按鈕至 <strong>104 人力銀行</strong> 投遞履歷，並請於應徵訊息中備註：<span style="color: #d9383a; font-weight: bold;">「中原大學校內徵才網上投遞」</span>。
             </p>
             <a id="comp-apply-btn" href="#" target="_blank" class="apply-btn">前往 104 投遞履歷 →</a>
         </div>
@@ -165,6 +166,10 @@
             <span class="close-modal-btn" onclick="closeModal()">&times;</span>
             <h2 id="modal-job-title" style="color: #1e3c72; margin-bottom: 15px;">職缺名稱</h2>
             <p id="modal-job-desc" style="line-height: 1.6; color: #555; white-space: pre-line;">詳細內容載入中...</p>
+            <!-- 💡 彈出視窗內也追加貼心應徵提示 -->
+            <div id="modal-job-apply-tip" style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ddd; color: #d9383a; font-weight: bold; font-size: 0.95rem;">
+                💡 應徵方式：請關閉此視窗，至網頁最下方點擊「前往 104 投遞履歷」，並備註「中原大學校內徵才網上投遞」。
+            </div>
         </div>
     </div>
 
@@ -233,26 +238,22 @@
                         const originalTitle = typeof job === 'object' ? (job.title || job.name) : job;
                         const jobDesc = typeof job === 'object' ? (job.desc || job.description) : "歡迎具備相關能力者前來投遞！";
                         
-                        // 🎯 1. 先用原始職稱判斷分類（因為原始職稱含有「實習」或「助理」關鍵字）
                         const lowerTitle = originalTitle.toLowerCase();
                         const isInternship = lowerTitle.includes("實習") || lowerTitle.includes("助理") || lowerTitle.includes("intern");
 
-                        // 🎯 2. 優化顯示名稱：如果職稱開頭有 "[長期實習]" 或 "【長期實習】"，我們在網頁畫面上把它剃除掉
                         let displayTitle = originalTitle.replace(/^\[長期實習\]\s*/, "");
                         displayTitle = displayTitle.replace(/^【長期實習】\s*/, "");
 
                         const btn = document.createElement("button");
                         btn.className = "job-button";
-                        btn.innerText = displayTitle; // 畫面上顯示乾淨的職稱
+                        btn.innerText = displayTitle; 
                         
                         btn.onclick = () => {
-                            // 彈出視窗也顯示乾淨職稱
                             document.getElementById("modal-job-title").innerText = displayTitle;
                             document.getElementById("modal-job-desc").innerText = jobDesc;
                             document.getElementById("jobModal").style.display = "flex";
                         };
 
-                        // 3. 分流塞入對應的區塊
                         if (isInternship) {
                             internContainer.appendChild(btn);
                         } else {
@@ -261,7 +262,7 @@
                     });
                 }
 
-                // 智慧應徵方式顯示邏輯
+                // 智慧應徵方式顯示邏輯：只要有職缺，且 JSON 裡面有填寫 hrUrl 就一定秀出來
                 const applyRow = document.getElementById("row-apply");
                 if (hasJobs && currentCompany.hrUrl && currentCompany.hrUrl.trim() !== "") {
                     document.getElementById("comp-apply-btn").href = currentCompany.hrUrl;
