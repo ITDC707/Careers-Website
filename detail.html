@@ -70,6 +70,31 @@
             color: white;
         }
 
+        /* 🎯 應徵方式區塊樣式 */
+        .apply-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 35px;
+        }
+        .apply-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(255,107,107,0.3);
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+        .apply-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255,107,107,0.4);
+        }
+
         /* 彈出視窗（Modal）樣式 */
         .modal-overlay {
             position: fixed;
@@ -119,9 +144,20 @@
         <h3 class="section-title">公司簡介</h3>
         <p id="comp-intro" style="line-height: 1.7; color: #444; white-space: pre-line; text-align: justify;">載入中...</p>
 
-        <!-- 💡 移除外層隱藏控制，標題文字永久顯示在網頁上 -->
-        <h3 class="section-title">徵才職缺</h3>
-        <div id="comp-jobs"></div>
+        <h3 class="section-title">徵才職缺 (全職)</h3>
+        <div id="comp-fulltime-jobs"></div>
+
+        <h3 class="section-title">徵才職缺 (實習)</h3>
+        <div id="comp-intern-jobs"></div>
+
+        <!-- 💡 應徵方式區塊：預設隱藏，有職缺且有網址時才透過 JS 顯示 -->
+        <div id="row-apply" class="apply-box" style="display: none;">
+            <h3 style="color: #1e3c72; margin-top: 0; margin-bottom: 10px;">📩 應徵方式</h3>
+            <p style="margin: 0; color: #555; line-height: 1.6;">
+                請至 104 人力銀行投遞履歷，並於應徵時備註<strong>「中原大學校內徵才網上投遞」</strong>。
+            </p>
+            <a id="comp-apply-btn" href="#" target="_blank" class="apply-btn">前往 104 投遞履歷 →</a>
+        </div>
     </div>
 
     <!-- 彈出視窗 HTML 結構 -->
@@ -184,18 +220,22 @@
                     document.getElementById("row-overseas").style.display = "none";
                 }
 
-                // 渲染職缺按鈕
-                const jobsContainer = document.getElementById("comp-jobs");
-                jobsContainer.innerHTML = ""; // 先清空內容
+                // 職缺容器與清空
+                const fulltimeContainer = document.getElementById("comp-fulltime-jobs");
+                const internContainer = document.getElementById("comp-intern-jobs");
+                fulltimeContainer.innerHTML = ""; 
+                internContainer.innerHTML = ""; 
                 
+                let hasJobs = false;
+
                 if (currentCompany.jobs && currentCompany.jobs.length > 0) {
+                    hasJobs = true;
                     currentCompany.jobs.forEach(job => {
-                        const btn = document.createElement("button");
-                        btn.className = "job-button";
-                        
                         const jobTitle = typeof job === 'object' ? (job.title || job.name) : job;
                         const jobDesc = typeof job === 'object' ? (job.desc || job.description) : "歡迎具備相關能力者前來投遞！";
                         
+                        const btn = document.createElement("button");
+                        btn.className = "job-button";
                         btn.innerText = jobTitle;
                         
                         btn.onclick = () => {
@@ -203,11 +243,23 @@
                             document.getElementById("modal-job-desc").innerText = jobDesc;
                             document.getElementById("jobModal").style.display = "flex";
                         };
-                        jobsContainer.appendChild(btn);
+
+                        const lowerTitle = jobTitle.toLowerCase();
+                        if (lowerTitle.includes("實習") || lowerTitle.includes("助理") || lowerTitle.includes("intern")) {
+                            internContainer.appendChild(btn);
+                        } else {
+                            fulltimeContainer.appendChild(btn);
+                        }
                     });
-                } else { 
-                    // 🎯 當沒有職缺時，這裡維持完全清空（什麼都不填入），達到底下一片空白的效果
-                    jobsContainer.innerHTML = ""; 
+                }
+
+                // 🎯 智慧應徵方式顯示邏輯：必須「有職缺」且「JSON 裡有提供 hrUrl 網址」才顯示
+                const applyRow = document.getElementById("row-apply");
+                if (hasJobs && currentCompany.hrUrl && currentCompany.hrUrl.trim() !== "") {
+                    document.getElementById("comp-apply-btn").href = currentCompany.hrUrl;
+                    applyRow.style.display = "block";
+                } else {
+                    applyRow.style.display = "none";
                 }
 
             } catch (error) {
