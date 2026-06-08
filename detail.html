@@ -6,7 +6,7 @@
     <title>企業詳細資訊</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* 內頁專屬的美化樣式 */
+        /* 內頁專屬的精美樣式 */
         .detail-container {
             max-width: 800px;
             margin: 40px auto;
@@ -71,12 +71,12 @@
             color: white;
         }
 
-        /* 🎯 補齊：功能強大的彈出視窗（Modal）樣式 */
+        /* 彈出視窗（Modal）樣式 */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.6);
-            display: none; /* 預設隱藏 */
+            display: none; 
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -98,12 +98,6 @@
             color: #999;
         }
         .close-modal-btn:hover { color: #333; }
-        
-        /* 福利列表樣式 */
-        .benefits-list {
-            padding-left: 20px;
-            line-height: 1.8;
-        }
     </style>
 </head>
 <body>
@@ -128,9 +122,6 @@
 
         <h3 class="section-title">開放職缺 (點擊查看詳情)</h3>
         <div id="comp-jobs"></div>
-
-        <h3 class="section-title">公司福利</h3>
-        <ul id="comp-benefits" class="benefits-list"></ul>
     </div>
 
     <div id="jobModal" class="modal-overlay" onclick="closeModalOutside(event)">
@@ -152,7 +143,7 @@
             }
 
             try {
-                // 讀取本地 data 資料夾內對應的 json
+                // 讀取本地 data/ 底下的獨立 json
                 const response = await fetch(`./data/${compId}.json`);
                 
                 if (!response.ok) {
@@ -170,7 +161,7 @@
                 document.getElementById("comp-skill").innerText = currentCompany.basicSkill || "未特別註明";
                 document.getElementById("comp-overseas").innerText = currentCompany.overseasAdvice || "未特別註明";
 
-                // 🎯 核心修復：精準渲染職缺按鈕，防呆機制啟動
+                // 渲染職缺按鈕 (支援純字串陣列)
                 const jobsContainer = document.getElementById("comp-jobs");
                 jobsContainer.innerHTML = "";
                 
@@ -179,13 +170,13 @@
                         const btn = document.createElement("button");
                         btn.className = "job-button";
                         
-                        // 🎯 防呆：如果你的 job 只是純字串就直接用，如果是物件就讀取 title
+                        // 相容字串格式與物件格式
                         const jobTitle = typeof job === 'object' ? (job.title || job.name) : job;
                         const jobDesc = typeof job === 'object' ? (job.desc || job.description || "歡迎對本職缺有興趣者投遞履歷！") : "歡迎對本職缺有興趣者投遞履歷！";
                         
                         btn.innerText = jobTitle;
                         
-                        // 點擊按鈕彈出視窗
+                        // 綁定點擊視窗事件
                         btn.onclick = () => {
                             document.getElementById("modal-job-title").innerText = jobTitle;
                             document.getElementById("modal-job-desc").innerText = jobDesc;
@@ -197,21 +188,10 @@
                     jobsContainer.innerText = "目前暫無開放職缺"; 
                 }
 
-                // 渲染福利列表
-                const benefitsContainer = document.getElementById("comp-benefits");
-                benefitsContainer.innerHTML = "";
-                if (currentCompany.benefits && currentCompany.benefits.length > 0) {
-                    currentCompany.benefits.forEach(b => {
-                        benefitsContainer.innerHTML += `<li>${b}</li>`;
-                    });
-                } else { 
-                    benefitsContainer.innerHTML = "<li>基本勞健保</li>"; 
-                }
-
             } catch (error) {
                 console.error("內頁錯誤:", error);
                 document.getElementById("comp-name").innerText = "找不到該企業資訊或資料尚未建檔";
-                document.getElementById("comp-intro").innerHTML = `<span style="color:red;">錯誤原因：${error.message}</span><br><br>請確保本地電腦資料夾裡，真的有一個叫做 <b>data</b> 的資料夾，且裡面含有 <b>${compId}.json</b> 檔案！`;
+                document.getElementById("comp-intro").innerHTML = `<span style="color:red;">錯誤原因：${error.message}</span><br><br>請確保本地電腦 <b>data</b> 資料夾內含有小寫的 <b>${compId}.json</b> 檔案！`;
             }
         });
 
