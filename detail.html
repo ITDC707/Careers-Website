@@ -119,10 +119,14 @@
         <h3 class="section-title">公司簡介</h3>
         <p id="comp-intro" style="line-height: 1.7; color: #444; white-space: pre-line; text-align: justify;">載入中...</p>
 
-        <h3 class="section-title">開放職缺 (點擊查看詳細要求)</h3>
-        <div id="comp-jobs"></div>
+        <!-- 💡 職缺區塊外層加上 id="job-section"，方便沒職缺時整個隱藏 -->
+        <div id="job-section">
+            <h3 class="section-title">徵才職缺 (點擊查看詳細要求)</h3>
+            <div id="comp-jobs"></div>
+        </div>
     </div>
 
+    <!-- 彈出視窗 HTML 結構 -->
     <div id="jobModal" class="modal-overlay" onclick="closeModalOutside(event)">
         <div class="modal-content">
             <span class="close-modal-btn" onclick="closeModal()">&times;</span>
@@ -153,6 +157,7 @@
                 document.getElementById("comp-logo").src = "./images/" + currentCompany.logo;
                 document.getElementById("comp-intro").innerText = currentCompany.intro || "暫無簡介";
 
+                // 智慧欄位隱藏
                 if (currentCompany.website && currentCompany.website.trim() !== "") {
                     document.getElementById("comp-web").href = currentCompany.website;
                     document.getElementById("row-web").style.display = "block";
@@ -181,10 +186,14 @@
                     document.getElementById("row-overseas").style.display = "none";
                 }
 
+                // 🎯 智慧職缺渲染：有職缺才顯示區域，沒職缺直接把整個區塊隱藏留白
                 const jobsContainer = document.getElementById("comp-jobs");
+                const jobSection = document.getElementById("job-section");
                 jobsContainer.innerHTML = "";
                 
                 if (currentCompany.jobs && currentCompany.jobs.length > 0) {
+                    jobSection.style.display = "block"; // 顯示整個職缺區塊
+                    
                     currentCompany.jobs.forEach(job => {
                         const btn = document.createElement("button");
                         btn.className = "job-button";
@@ -202,7 +211,8 @@
                         jobsContainer.appendChild(btn);
                     });
                 } else { 
-                    jobsContainer.innerText = "目前暫無開放職缺"; 
+                    // 🎯 沒職缺時，直接讓「徵才職缺」標題和內容全部消失留白！
+                    jobSection.style.display = "none"; 
                 }
 
             } catch (error) {
