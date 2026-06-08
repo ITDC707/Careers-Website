@@ -119,11 +119,9 @@
         <h3 class="section-title">公司簡介</h3>
         <p id="comp-intro" style="line-height: 1.7; color: #444; white-space: pre-line; text-align: justify;">載入中...</p>
 
-        <!-- 💡 職缺區塊外層加上 id="job-section"，方便沒職缺時整個隱藏 -->
-        <div id="job-section">
-            <h3 class="section-title">徵才職缺 (點擊查看詳細要求)</h3>
-            <div id="comp-jobs"></div>
-        </div>
+        <!-- 💡 移除外層隱藏控制，標題文字永久顯示在網頁上 -->
+        <h3 class="section-title">徵才職缺</h3>
+        <div id="comp-jobs"></div>
     </div>
 
     <!-- 彈出視窗 HTML 結構 -->
@@ -186,14 +184,11 @@
                     document.getElementById("row-overseas").style.display = "none";
                 }
 
-                // 🎯 智慧職缺渲染：有職缺才顯示區域，沒職缺直接把整個區塊隱藏留白
+                // 渲染職缺按鈕
                 const jobsContainer = document.getElementById("comp-jobs");
-                const jobSection = document.getElementById("job-section");
-                jobsContainer.innerHTML = "";
+                jobsContainer.innerHTML = ""; // 先清空內容
                 
                 if (currentCompany.jobs && currentCompany.jobs.length > 0) {
-                    jobSection.style.display = "block"; // 顯示整個職缺區塊
-                    
                     currentCompany.jobs.forEach(job => {
                         const btn = document.createElement("button");
                         btn.className = "job-button";
@@ -211,8 +206,8 @@
                         jobsContainer.appendChild(btn);
                     });
                 } else { 
-                    // 🎯 沒職缺時，直接讓「徵才職缺」標題和內容全部消失留白！
-                    jobSection.style.display = "none"; 
+                    // 🎯 當沒有職缺時，這裡維持完全清空（什麼都不填入），達到底下一片空白的效果
+                    jobsContainer.innerHTML = ""; 
                 }
 
             } catch (error) {
