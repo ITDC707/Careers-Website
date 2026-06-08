@@ -109,7 +109,6 @@
             <h1 id="comp-name">公司名稱載入中...</h1>
         </div>
 
-        <!-- 💡 每個欄位都有獨立的 id 區塊，方便 JavaScript 控制顯示或隱藏 -->
         <div class="meta-info">
             <div id="row-web"><p><span class="meta-label">官方網站：</span><a id="comp-web" href="#" target="_blank">點擊前往</a></p></div>
             <div id="row-lang"><p><span class="meta-label">具備語言能力：</span><span id="comp-lang">載入中...</span></p></div>
@@ -124,7 +123,6 @@
         <div id="comp-jobs"></div>
     </div>
 
-    <!-- 彈出視窗 HTML 結構 -->
     <div id="jobModal" class="modal-overlay" onclick="closeModalOutside(event)">
         <div class="modal-content">
             <span class="close-modal-btn" onclick="closeModal()">&times;</span>
@@ -151,14 +149,10 @@
                 
                 const currentCompany = await response.json();
 
-                // 填入必有基本資料
                 document.getElementById("comp-name").innerText = currentCompany.name;
                 document.getElementById("comp-logo").src = "./images/" + currentCompany.logo;
                 document.getElementById("comp-intro").innerText = currentCompany.intro || "暫無簡介";
 
-                // 🎯 智慧欄位渲染邏輯：有填資料才顯示，沒填就徹底隱藏
-                
-                // 1. 官方網站
                 if (currentCompany.website && currentCompany.website.trim() !== "") {
                     document.getElementById("comp-web").href = currentCompany.website;
                     document.getElementById("row-web").style.display = "block";
@@ -166,7 +160,6 @@
                     document.getElementById("row-web").style.display = "none";
                 }
 
-                // 2. 具備語言能力
                 if (currentCompany.langRequirement && currentCompany.langRequirement.trim() !== "") {
                     document.getElementById("comp-lang").innerText = currentCompany.langRequirement;
                     document.getElementById("row-lang").style.display = "block";
@@ -174,7 +167,6 @@
                     document.getElementById("row-lang").style.display = "none";
                 }
 
-                // 3. 基礎能力需求
                 if (currentCompany.basicSkill && currentCompany.basicSkill.trim() !== "") {
                     document.getElementById("comp-skill").innerText = currentCompany.basicSkill;
                     document.getElementById("row-skill").style.display = "block";
@@ -182,7 +174,6 @@
                     document.getElementById("row-skill").style.display = "none";
                 }
 
-                // 4. 境外生建議（台聚沒給會自動隱藏，別家有給會自動跳出）
                 if (currentCompany.overseasAdvice && currentCompany.overseasAdvice.trim() !== "") {
                     document.getElementById("comp-overseas").innerText = currentCompany.overseasAdvice;
                     document.getElementById("row-overseas").style.display = "block";
@@ -190,7 +181,6 @@
                     document.getElementById("row-overseas").style.display = "none";
                 }
 
-                // 渲染職缺按鈕
                 const jobsContainer = document.getElementById("comp-jobs");
                 jobsContainer.innerHTML = "";
                 
