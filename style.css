@@ -3,6 +3,7 @@
    ========================================================================== */
 body {
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    /* 🎯 網頁最底層背景色，維持跟以前一樣的溫和淺灰 */
     background-color: #f4f7f6;
     margin: 0;
     padding: 0;
@@ -12,11 +13,12 @@ body {
 header {
     text-align: center;
     padding: 50px 20px 40px 20px;
-    /* 🎯 藍白交換：背景改成清爽的亮白色調，帶一點點溫和的漸層 */
+    /* 🎯 頂部維持清爽白底，確保雙 Logo 完美清晰 */
     background: linear-gradient(135deg, #ffffff 0%, #f8fbfd 100%);
     color: #333;
-    /* 加上淡淡的底部陰影，讓頂部區塊跟下方的網格產生高質感的層次感 */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); 
+    position: relative;
+    z-index: 10;
 }
 
 /* 🎯 雙 Logo 完美並排與防爆版設定 */
@@ -24,18 +26,17 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 40px;            /* 稍微拉大間距，讓兩個 Logo 更舒展 */
-    margin-bottom: 25px;  /* 與主標題的距離 */
-    flex-wrap: wrap;      /* 手機版自動換行防擠壓 */
+    gap: 40px;            
+    margin-bottom: 25px;  
+    flex-wrap: wrap;      
 }
 
 .header-logo {
-    height: 65px;         /* 稍微放大一點點，在白底上更好看 */
-    width: auto;          /* 依比例自動縮放 */
+    height: 65px;         
+    width: auto;          
     object-fit: contain;
 }
 
-/* 針對職涯中心 Logo 字體比例微調高度 */
 .career-logo {
     height: 60px;
 }
@@ -43,47 +44,46 @@ header {
 header h1 {
     margin: 0 0 12px 0;
     font-size: 2.6rem;
-    /* 🎯 藍白交換：標題字體改成穩重的深藍色，呼應中原大學校徽色系 */
-    color: #1e3c72; 
+    color: #1e3c72; /* 標題維持穩重深藍 */
     font-weight: 700;
     letter-spacing: 1px;
 }
 
 header p {
     margin: 0;
-    /* 🎯 藍白交換：副標題改成質感的灰色，層次分明 */
     color: #666666;
     font-size: 1.05rem;
 }
 
+/* 🎯 關鍵改動：把下方放置卡片的 main 區域整片換成質感深藍色漸層 */
 main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    min-height: calc(100vh - 250px); /* 確保內容少時也能撐滿畫面 */
+    padding: 50px 20px;
 }
 
-/* ==========================================================================
-   2. 核心：CSS Grid 網格佈局
-   ========================================================================== */
 .grid-container {
+    max-width: 1200px;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
     gap: 30px; 
 }
 
 /* ==========================================================================
-   3. 企業卡片樣式優化
+   2. 企業卡片樣式優化（維持白色，在藍底上極度亮眼）
    ========================================================================== */
 .company-card {
-    background-color: white;
+    background-color: white; /* 🎯 卡片維持純白 */
     border-radius: 12px;
     padding: 25px;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    /* 微調陰影，讓白色卡片在深藍背景上更具立體浮空感 */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     justify-content: space-between; 
-    height: 300px; /* 🎯 強制所有卡片高度整齊劃一 */
+    height: 300px; 
     cursor: pointer;
     transition: all 0.3s ease; 
     position: relative;
@@ -92,13 +92,13 @@ main {
 
 .company-card:hover {
     top: -8px; 
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15); 
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35); 
 }
 
 /* 🎯 限制 Logo 區域的高度與排版 */
 .card-logo-container {
     width: 100%;
-    height: 110px; /* 固定 Logo 區域的高度 */
+    height: 110px; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -110,10 +110,10 @@ main {
     box-sizing: border-box;
 }
 
-/* 🎯 終極視覺平衡：大圖縮小、小圖撐滿，不拉伸不壓扁 */
+/* 🎯 終極視覺平衡 */
 .company-logo-img {
-    max-width: 75% !important;   /* 限制寬度在 75%，防止和碩這種方圖顯得太大 */
-    max-height: 85% !important;  /* 限制高度 */
+    max-width: 75% !important;   
+    max-height: 85% !important;  
     width: auto !important;
     height: auto !important;
     object-fit: contain !important;
@@ -135,15 +135,15 @@ main {
 }
 
 /* ==========================================================================
-   4. 內頁詳細資訊頁面 (detail.html) 的樣式
+   3. 內頁詳細資訊頁面 (detail.html) 的樣式
    ========================================================================== */
 .detail-container {
     max-width: 800px;
-    margin: 40px auto;
+    margin: 0 auto; /* 配合 main 的 padding */
     background: white;
     padding: 40px;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 
 .back-btn {
@@ -207,7 +207,7 @@ main {
     font-family: monospace;
 }
 
-/* 🎯 RWD 手機版微調：當螢幕太小時自動縮小 Logo 高度防擠爆 */
+/* 🎯 RWD 手機版微調 */
 @media (max-width: 480px) {
     .logo-container {
         gap: 20px;
