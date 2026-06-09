@@ -53,7 +53,7 @@ header p {
 }
 
 /* ==========================================================================
-   2. 核心特效：極光流體變色 + 純 CSS 打造「四角十字星芒」璀璨星空 (main)
+   2. 核心特效：極光流體 + 夢幻多層次星空（告別白槓，真・銀河效果）
    ========================================================================== */
 main {
     min-height: calc(100vh - 250px); 
@@ -63,7 +63,7 @@ main {
     z-index: 1;
 }
 
-/* 底層動態極光流體變色 */
+/* 底層：你稱讚的流體漸層變色 */
 main::before {
     content: "";
     position: absolute;
@@ -71,57 +71,61 @@ main::before {
     z-index: -1;
     background: linear-gradient(125deg, #091124, #12254f, #1f4287, #278ea5, #1f4287, #091124);
     background-size: 400% 400%;
-    animation: luxuryFluidFlow 8s ease infinite;
+    animation: luxuryFluidFlow 10s ease infinite;
 }
 
-/* 🎯 救星降臨！利用線性漸層疊加，強行在背景畫出真正的「十字璀璨星芒」粒子群 */
-main::after {
+/* 🎯 專屬星空特效層：利用多重陰影在夜空中隨機撒落無數顆真正的繁星 */
+.stars-layer {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* 星星第一層：細小遠星（微弱閃爍） */
+.stars-layer::before {
     content: "";
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: -1;
-    opacity: 0.9;
-    
-    /* 透過水平與垂直的超尖銳漸層，交叉出像 image_6b0c47.png 一樣的實體十字星芒 */
-    background-image: 
-        /* 巨型星芒 1 (左上) */
-        linear-gradient(90deg, transparent 49.5%, rgba(255,255,255,0.9) 50%, transparent 50.5%),
-        linear-gradient(0deg, transparent 48%, rgba(255,255,255,0.9) 50%, transparent 52%),
-        /* 中型星芒 2 (右上) */
-        linear-gradient(90deg, transparent 79.7%, rgba(255,255,255,0.85) 80%, transparent 80.3%),
-        linear-gradient(0deg, transparent 29%, rgba(255,255,255,0.85) 30%, transparent 31%),
-        /* 中型星芒 3 (左下) */
-        linear-gradient(90deg, transparent 24.7%, rgba(255,255,255,0.85) 25%, transparent 25.3%),
-        linear-gradient(0deg, transparent 69%, rgba(255,255,255,0.85) 70%, transparent 71%),
-        /* 迷你星芒 4 (右下) */
-        linear-gradient(90deg, transparent 84.8%, rgba(255,255,255,0.8) 85%, transparent 85.2%),
-        linear-gradient(0deg, transparent 74%, rgba(255,255,255,0.8) 75%, transparent 76%),
-        /* 迷你星芒 5 (正中下) */
-        linear-gradient(90deg, transparent 49.8%, rgba(255,255,255,0.8) 50%, transparent 50.2%),
-        linear-gradient(0deg, transparent 84%, rgba(255,255,255,0.8) 85%, transparent 86%);
-
-    /* 限制這些星芒線條的擴散範圍，讓它們緊縮成一個個完美的十字星星點 */
-    background-size: 40px 40px, 40px 40px, 30px 30px, 30px 30px, 35px 35px, 35px 35px, 20px 20px, 20px 20px, 25px 25px, 25px 25px;
-    background-repeat: no-repeat;
-    /* 星芒精確位置佈局 */
-    background-position: 15% 20%, 15% 20%, 82% 25%, 82% 25%, 20% 70%, 20% 70%, 88% 75%, 88% 75%, 52% 85%, 52% 85%;
-    
-    /* 🎯 讓星芒產生高質感的動態呼吸閃爍效果 */
-    animation: starTwinkle 4s ease-in-out infinite alternate;
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    /* 利用 box-shadow 在不同 X, Y 座標點亮無數顆微小的白色星星 */
+    box-shadow: 
+        10vw 15vh #fff, 25vw 35vh rgba(255,255,255,0.7), 40vw 10vh #fff, 55vw 45vh rgba(255,255,255,0.4),
+        70vw 20vh #fff, 85vw 40vh rgba(255,255,255,0.8), 90vw 15vh #fff, 15vw 60vh rgba(255,255,255,0.6),
+        30vw 80vh #fff, 50vw 70vh rgba(255,255,255,0.5), 65vw 85vh #fff, 80vw 65vh rgba(255,255,255,0.9),
+        95vw 55vh #fff, 5vw 90vh rgba(255,255,255,0.7), 35vw 30vh #fff, 75vw 75vh rgba(255,255,255,0.5);
+    animation: starBlink 3s ease-in-out infinite alternate;
 }
 
-/* 漸層流體動畫 */
+/* 星星第二層：稍大近星（帶有夢幻螢光暈感） */
+.stars-layer::after {
+    content: "";
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: transparent;
+    border-radius: 50%;
+    /* 較大顆的星星，額外加上模糊半徑，做出類似 image_6b0c47.png 的發光感 */
+    box-shadow: 
+        18vw 25vh 1px #fff, 48vw 20vh 2px rgba(255,255,255,0.9), 78vw 15vh 1px #fff,
+        12vw 75vh 2px rgba(255,255,255,0.8), 58vw 60vh 1px #fff, 88vw 80vh 2px #fff,
+        32vw 50vh 1px rgba(255,255,255,0.9), 68vw 35vh 2px #fff, 22vw 92vh 1px #fff;
+    animation: starBlink 4s ease-in-out infinite alternate-reverse;
+}
+
+/* 流體動畫 */
 @keyframes luxuryFluidFlow {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-/* 星芒閃爍動畫 */
-@keyframes starTwinkle {
-    0% { opacity: 0.3; transform: scale(0.95); }
-    50% { opacity: 1.0; transform: scale(1.05); }
-    100% { opacity: 0.4; transform: scale(0.97); }
+/* 星星柔和呼吸閃爍，絕不翻車 */
+@keyframes starBlink {
+    0% { opacity: 0.3; transform: translateY(0px) scale(0.9); }
+    50% { opacity: 1.0; transform: translateY(-2px) scale(1.1); }
+    100% { opacity: 0.4; transform: translateY(1px) scale(0.95); }
 }
 
 .grid-container {
@@ -135,18 +139,18 @@ main::after {
 }
 
 /* ==========================================================================
-   3. 企業卡片：3.5px 實心極光藍加厚框（加入 !important 終極制霸）
+   3. 企業卡片：5px 實心極光藍超級霸氣厚框（!important 宣告）
    ========================================================================== */
 .company-card {
     background: rgba(255, 255, 255, 0.95) !important; 
     backdrop-filter: blur(8px) !important; 
     -webkit-backdrop-filter: blur(8px) !important;
-    border-radius: 18px !important; 
+    border-radius: 20px !important; /* 稍微加圓潤配合粗邊框 */
     padding: 25px !important;
     text-align: center !important;
     
-    /* 🎯 框線終極大救星：加厚到 3.5px 實心，顏色改用超漂亮的極光藍，絕對清晰可見！ */
-    border: 3.5px solid #00b4d8 !important;
+    /* 🎯 外框再粗一點：直接拉到 5px 實心，顏色選用鮮艷奪目的極光藍，保證清晰絕對不細！ */
+    border: 5px solid #00b4d8 !important;
     
     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3) !important;
     display: flex !important;
@@ -164,14 +168,14 @@ main::after {
     top: -10px !important; 
     background: #ffffff !important; 
     
-    /* 🎯 Hover 時框線轉為極亮螢光天藍色 */
+    /* Hover 時框線轉為超級亮眼的電光天藍 */
     border-color: #00f5ff !important;
     
-    /* 霓虹光暈外擴強度加倍 */
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 245, 255, 0.7) !important; 
+    /* 霓虹環境燈特效 */
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4), 0 0 35px rgba(0, 245, 255, 0.85) !important; 
 }
 
-/* 🎯 限制 Logo 區域的高度與排版 */
+/* 限制 Logo 區域的高度與排版 */
 .card-logo-container {
     width: 100%;
     height: 110px; 
@@ -228,81 +232,18 @@ main::after {
     margin: 0 auto; 
     background: white;
     padding: 40px;
-    border-radius: 18px;
+    border-radius: 20px;
     box-shadow: 0 25px 60px rgba(0,0,0,0.5);
-    border: 3.5px solid #00b4d8;
+    border: 5px solid #00b4d8;
 }
 
-.back-btn {
-    display: inline-block;
-    margin-bottom: 20px;
-    color: #2a5298;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.detail-header {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    border-bottom: 2px solid #eef2f7;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
-}
-
-.detail-logo {
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
-}
-
-.section-title {
-    color: #1e3c72;
-    border-left: 4px solid #2a5298;
-    padding-left: 10px;
-    margin-top: 30px;
-    font-size: 1.3rem;
-}
-
-.job-tag {
-    display: inline-block;
-    background-color: #eef2f7;
-    color: #1e3c72;
-    padding: 5px 15px;
-    border-radius: 6px;
-    margin: 5px;
-    font-weight: bold;
-}
-
-.meta-info p {
-    margin: 10px 0;
-    line-height: 1.6;
-}
-
-.meta-label {
-    font-weight: bold;
-    color: #1e3c72;
-}
-
-.debug-box {
-    background-color: #ffebe9;
-    border: 1px solid #ffc1bd;
-    color: #b31412;
-    padding: 15px;
-    border-radius: 6px;
-    margin-top: 20px;
-    font-family: monospace;
-}
-
-/* 🎯 RWD 手機版微調 */
-@media (max-width: 480px) {
-    .logo-container {
-        gap: 20px;
-    }
-    .header-logo {
-        height: 50px;
-    }
-    .career-logo {
-        height: 45px;
-    }
-}
+/* 其餘內頁樣式保持不變 */
+.back-btn { display: inline-block; margin-bottom: 20px; color: #2a5298; text-decoration: none; font-weight: bold; }
+.detail-header { display: flex; align-items: center; gap: 20px; border-bottom: 2px solid #eef2f7; padding-bottom: 20px; margin-bottom: 30px; }
+.detail-logo { width: 120px; height: 120px; object-fit: contain; }
+.section-title { color: #1e3c72; border-left: 4px solid #2a5298; padding-left: 10px; margin-top: 30px; font-size: 1.3rem; }
+.job-tag { display: inline-block; background-color: #eef2f7; color: #1e3c72; padding: 5px 15px; border-radius: 6px; margin: 5px; font-weight: bold; }
+.meta-info p { margin: 10px 0; line-height: 1.6; }
+.meta-label { font-weight: bold; color: #1e3c72; }
+.debug-box { background-color: #ffebe9; border: 1px solid #ffc1bd; color: #b31412; padding: 15px; border-radius: 6px; margin-top: 20px; font-family: monospace; }
+@media (max-width: 480px) { .logo-container { gap: 20px; } .header-logo { height: 50px; } .career-logo { height: 45px; } }
