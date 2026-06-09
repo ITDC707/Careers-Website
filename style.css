@@ -1,5 +1,5 @@
 /* ==========================================================================
-   1. 基礎全域設定
+   1. 基礎全域設定與頂部 Logo 排版
    ========================================================================== */
 body {
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -14,6 +14,28 @@ header {
     padding: 40px 20px;
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
     color: white;
+}
+
+/* 🎯 雙 Logo 完美並排與防爆版設定 */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;            /* 兩個 Logo 之間的寬敞間距 */
+    margin-bottom: 20px;  /* 與主標題的距離 */
+    flex-wrap: wrap;      /* 手機版自動換行防擠壓 */
+}
+
+.header-logo {
+    height: 60px;         /* 限制高度，維持視覺和諧 */
+    width: auto;          /* 依比例自動縮放 */
+    object-fit: contain;
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1)); /* 加上質感小陰影 */
+}
+
+/* 針對職涯中心 Logo 字體比例微調高度 */
+.career-logo {
+    height: 55px;
 }
 
 header h1 {
@@ -175,4 +197,17 @@ main {
     border-radius: 6px;
     margin-top: 20px;
     font-family: monospace;
+}
+
+/* 🎯 RWD 手機版微調：當螢幕太小時自動縮小 Logo 高度防擠爆 */
+@media (max-width: 480px) {
+    .logo-container {
+        gap: 15px;
+    }
+    .header-logo {
+        height: 45px;
+    }
+    .career-logo {
+        height: 40px;
+    }
 }
