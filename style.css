@@ -53,26 +53,68 @@ header p {
 }
 
 /* ==========================================================================
-   2. 核心特效：淺藍變深藍・巨型流體漸層動畫背景 (main)
+   2. 核心特效：大跨度極光流體 + 滿天白色星星闪烁背景 (main)
    ========================================================================== */
 main {
     min-height: calc(100vh - 250px); 
     padding: 60px 20px;
     position: relative;
-    
-    /* 🎯 特效：拿掉網格！改用大跨度的藍色系動態流體（深海藍 -> 科技藍 -> 淺靛藍） */
-    background: linear-gradient(125deg, #0b1528, #122244, #1e3c72, #2a5298, #4a77be, #122244);
-    background-size: 300% 300%;
-    
-    /* 🎯 變色動畫：8秒循環，速度有感且極度絲滑 */
-    animation: blueFluidFlow 8s ease infinite;
+    overflow: hidden;
+    z-index: 1;
 }
 
-/* 🎯 淺藍變深藍的動態位移軌跡 */
-@keyframes blueFluidFlow {
+/* 🎯 特效升級：利用偽元素 ::before 製作純白十字星芒背景，並加上呼吸閃爍動畫 */
+main::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    
+    /* 1. 底層依然是讚讚的流體漸層變色 */
+    background: linear-gradient(125deg, #091124, #12254f, #1f4287, #278ea5, #1f4287, #091124);
+    background-size: 400% 400%;
+    animation: luxuryFluidFlow 7s ease infinite;
+}
+
+/* 🎯 專屬星芒層 ::after：利用多重放射漸層手繪出無數個類似 image_6b0c47.png 的白色十字星芒粒子 */
+main::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    opacity: 0.85;
+    
+    /* 在不同座標繪製大小不一的白色四角星芒 */
+    background-image: 
+        /* 星星 A 群 */
+        radial-gradient(circle at 15% 20%, #ffffff 0%, rgba(255,255,255,0.8) 1px, transparent 4px),
+        radial-gradient(circle at 45% 15%, #ffffff 0%, rgba(255,255,255,0.8) 2px, transparent 6px),
+        radial-gradient(circle at 85% 25%, #ffffff 0%, rgba(255,255,255,0.8) 1px, transparent 5px),
+        /* 星星 B 群 */
+        radial-gradient(circle at 25% 65%, #ffffff 0%, rgba(255,255,255,0.8) 2px, transparent 6px),
+        radial-gradient(circle at 60% 80%, #ffffff 0%, rgba(255,255,255,0.8) 1px, transparent 4px),
+        radial-gradient(circle at 75% 50%, #ffffff 0%, rgba(255,255,255,0.8) 2px, transparent 7px),
+        /* 星星 C 群 */
+        radial-gradient(circle at 35% 40%, #ffffff 0%, rgba(255,255,255,0.8) 1px, transparent 5px),
+        radial-gradient(circle at 90% 75%, #ffffff 0%, rgba(255,255,255,0.8) 2px, transparent 6px);
+        
+    background-size: 100% 100%;
+    /* 🎯 讓整片星空產生慢速的璀璨閃爍、呼吸效果 */
+    animation: starTwinkle 3.5s ease-in-out infinite alternate;
+}
+
+/* 漸層背景變色動畫 */
+@keyframes luxuryFluidFlow {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
+}
+
+/* 星星閃爍呼吸動畫 */
+@keyframes starTwinkle {
+    0% { opacity: 0.4; transform: scale(0.98); }
+    50% { opacity: 0.9; transform: scale(1.01); }
+    100% { opacity: 0.5; transform: scale(0.99); }
 }
 
 .grid-container {
@@ -81,44 +123,45 @@ main {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
     gap: 35px; 
+    position: relative;
+    z-index: 5;
 }
 
 /* ==========================================================================
-   3. 企業卡片：平常清晰有框 + Hover 藍光霓虹
+   3. 企業卡片：2px 科技亮天藍實心外框（加入 !important 終極強制命令）
    ========================================================================== */
 .company-card {
-    background-color: white; 
-    border-radius: 16px; 
-    padding: 25px;
-    text-align: center;
+    background: rgba(255, 255, 255, 0.94) !important; 
+    backdrop-filter: blur(8px) !important; 
+    -webkit-backdrop-filter: blur(8px) !important;
+    border-radius: 18px !important; 
+    padding: 25px !important;
+    text-align: center !important;
     
-    /* 🎯 解決沒框問題：平常就給它一圈絕對看得到的 1.5px 實心鋼鐵藍灰色細邊框 */
-    border: 1.5px solid #d1dfed;
+    /* 🎯 終極修正：直接使用 2px 的科技亮天藍色，並加上 !important 宣告，絕對不允許被吃掉！ */
+    border: 2px solid #64b5f6 !important;
     
-    /* 下方卡片立體陰影 */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-    
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; 
-    height: 310px; 
-    cursor: pointer;
-    position: relative;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important; 
+    height: 310px !important; 
+    cursor: pointer !important;
+    position: relative !important;
     top: 0;
-    
-    /* 動態過渡效果 */
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
 }
 
 /* 🎯 滑鼠懸停（Hover）特效 */
 .company-card:hover {
-    top: -8px; /* 微微上浮 */
+    top: -10px !important; 
+    background: #ffffff !important; 
     
-    /* 🎯 Hover 時邊框瞬間變成超吸睛的亮麗極光藍 */
-    border-color: #0072ff;
+    /* 🎯 Hover 時外框激發成極致亮藍 */
+    border-color: #00d2ff !important;
     
-    /* 🎯 卡片底部綻放出明顯的淺藍色環境發光圈（Glow） */
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 25px rgba(0, 114, 255, 0.5); 
+    /* 霓虹底盤燈外擴光暈 */
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35), 0 0 25px rgba(0, 210, 255, 0.6) !important; 
 }
 
 /* 🎯 限制 Logo 區域的高度與排版 */
@@ -130,11 +173,11 @@ main {
     justify-content: center;
     margin-bottom: 20px;
     background-color: #ffffff; 
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
     padding: 10px;
     box-sizing: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.02);
 }
 
 .company-logo-img {
@@ -143,12 +186,11 @@ main {
     width: auto !important;
     height: auto !important;
     object-fit: contain !important;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
 }
 
-/* Hover 時 Logo 微微放大互動 */
 .company-card:hover .company-logo-img {
-    transform: scale(1.04);
+    transform: scale(1.05);
 }
 
 .card-title {
@@ -167,9 +209,8 @@ main {
     transition: color 0.3s ease;
 }
 
-/* Hover 時底部的文字同步亮起 */
 .company-card:hover .card-footer {
-    color: #0072ff;
+    color: #00c6ff;
 }
 
 /* ==========================================================================
@@ -180,9 +221,9 @@ main {
     margin: 0 auto; 
     background: white;
     padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    border: 1.5px solid #d1dfed;
+    border-radius: 18px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    border: 2px solid #64b5f6;
 }
 
 .back-btn {
