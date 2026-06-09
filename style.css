@@ -11,9 +11,12 @@ body {
 
 header {
     text-align: center;
-    padding: 40px 20px;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    color: white;
+    padding: 50px 20px 40px 20px;
+    /* 🎯 藍白交換：背景改成清爽的亮白色調，帶一點點溫和的漸層 */
+    background: linear-gradient(135deg, #ffffff 0%, #f8fbfd 100%);
+    color: #333;
+    /* 加上淡淡的底部陰影，讓頂部區塊跟下方的網格產生高質感的層次感 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); 
 }
 
 /* 🎯 雙 Logo 完美並排與防爆版設定 */
@@ -21,31 +24,36 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;            /* 兩個 Logo 之間的寬敞間距 */
-    margin-bottom: 20px;  /* 與主標題的距離 */
+    gap: 40px;            /* 稍微拉大間距，讓兩個 Logo 更舒展 */
+    margin-bottom: 25px;  /* 與主標題的距離 */
     flex-wrap: wrap;      /* 手機版自動換行防擠壓 */
 }
 
 .header-logo {
-    height: 60px;         /* 限制高度，維持視覺和諧 */
+    height: 65px;         /* 稍微放大一點點，在白底上更好看 */
     width: auto;          /* 依比例自動縮放 */
     object-fit: contain;
-    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1)); /* 加上質感小陰影 */
 }
 
 /* 針對職涯中心 Logo 字體比例微調高度 */
 .career-logo {
-    height: 55px;
+    height: 60px;
 }
 
 header h1 {
-    margin: 0 0 10px 0;
-    font-size: 2.5rem;
+    margin: 0 0 12px 0;
+    font-size: 2.6rem;
+    /* 🎯 藍白交換：標題字體改成穩重的深藍色，呼應中原大學校徽色系 */
+    color: #1e3c72; 
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
 header p {
     margin: 0;
-    opacity: 0.9;
+    /* 🎯 藍白交換：副標題改成質感的灰色，層次分明 */
+    color: #666666;
+    font-size: 1.05rem;
 }
 
 main {
@@ -202,12 +210,12 @@ main {
 /* 🎯 RWD 手機版微調：當螢幕太小時自動縮小 Logo 高度防擠爆 */
 @media (max-width: 480px) {
     .logo-container {
-        gap: 15px;
+        gap: 20px;
     }
     .header-logo {
-        height: 45px;
+        height: 50px;
     }
     .career-logo {
-        height: 40px;
+        height: 45px;
     }
 }
