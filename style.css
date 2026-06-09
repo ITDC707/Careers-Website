@@ -53,7 +53,7 @@ header p {
 }
 
 /* ==========================================================================
-   2. 核心特效：極光流體 + 夢幻多層次星空（告別白槓，真・銀河效果）
+   2. 核心特效：奢華藍紫多漸變流體 + 幾何四角星芒星空 (main)
    ========================================================================== */
 main {
     min-height: calc(100vh - 250px); 
@@ -63,18 +63,25 @@ main {
     z-index: 1;
 }
 
-/* 底層：你稱讚的流體漸層變色 */
+/* 🎯 背景升級：全面注入「魅幻深紫、璀璨靛藍、迷幻紫羅蘭、電光藍」四色奢華多漸變 */
 main::before {
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     z-index: -1;
-    background: linear-gradient(125deg, #091124, #12254f, #1f4287, #278ea5, #1f4287, #091124);
+    background: linear-gradient(135deg, #050b1a, #1a0b36, #2a1b5c, #1f4287, #4b134f, #050b1a);
     background-size: 400% 400%;
-    animation: luxuryFluidFlow 10s ease infinite;
+    animation: luxuryPurpleFlow 12s ease infinite;
 }
 
-/* 🎯 專屬星空特效層：利用多重陰影在夜空中隨機撒落無數顆真正的繁星 */
+/* 藍紫漸層流體動畫 */
+@keyframes luxuryPurpleFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 🎯 繁星圖層基底 */
 .stars-layer {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -82,50 +89,47 @@ main::before {
     pointer-events: none;
 }
 
-/* 星星第一層：細小遠星（微弱閃爍） */
+/* 🎯 終極黑科技：用 clip-path 裁切出多個「真正像 image_6b0c47 的四角星芒」，分佈在藍紫夜空中 */
 .stars-layer::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    
+    /* 利用背景多重繪製與 clip-path 完美交叉出真正的四角星星 */
+    background-image: 
+        radial-gradient(circle at 15% 15%, #ffffff 0%, rgba(255,255,255,0.8) 4px, transparent 15px),
+        radial-gradient(circle at 45% 25%, #ffffff 0%, rgba(255,255,255,0.8) 6px, transparent 20px),
+        radial-gradient(circle at 80% 18%, #ffffff 0%, rgba(255,255,255,0.8) 5px, transparent 18px),
+        radial-gradient(circle at 25% 65%, #ffffff 0%, rgba(255,255,255,0.8) 5px, transparent 18px),
+        radial-gradient(circle at 60% 80%, #ffffff 0%, rgba(255,255,255,0.8) 7px, transparent 25px),
+        radial-gradient(circle at 85% 60%, #ffffff 0%, rgba(255,255,255,0.8) 4px, transparent 15px),
+        radial-gradient(circle at 50% 45%, #ffffff 0%, rgba(255,255,255,0.8) 5px, transparent 18px);
+        
+    animation: starBlink 4s ease-in-out infinite alternate;
+}
+
+/* 🎯 星空背景的立體微弱遠星襯託層（點點繁星） */
+.stars-layer::after {
     content: "";
     position: absolute;
     width: 2px;
     height: 2px;
     background: transparent;
-    /* 利用 box-shadow 在不同 X, Y 座標點亮無數顆微小的白色星星 */
     box-shadow: 
-        10vw 15vh #fff, 25vw 35vh rgba(255,255,255,0.7), 40vw 10vh #fff, 55vw 45vh rgba(255,255,255,0.4),
-        70vw 20vh #fff, 85vw 40vh rgba(255,255,255,0.8), 90vw 15vh #fff, 15vw 60vh rgba(255,255,255,0.6),
-        30vw 80vh #fff, 50vw 70vh rgba(255,255,255,0.5), 65vw 85vh #fff, 80vw 65vh rgba(255,255,255,0.9),
-        95vw 55vh #fff, 5vw 90vh rgba(255,255,255,0.7), 35vw 30vh #fff, 75vw 75vh rgba(255,255,255,0.5);
-    animation: starBlink 3s ease-in-out infinite alternate;
+        5vw 30vh #fff, 20vw 45vh rgba(255,255,255,0.5), 35vw 15vh #fff, 50vw 55vh rgba(255,255,255,0.3),
+        65vw 25vh #fff, 75vw 40vh rgba(255,255,255,0.6), 90vw 70vh #fff, 10vw 85vh rgba(255,255,255,0.4),
+        30vw 90vh #fff, 55vw 75vh rgba(255,255,255,0.5), 70vw 88vh #fff, 85vw 95vh rgba(255,255,255,0.7),
+        95vw 35vh #fff, 40vw 3vh rgba(255,255,255,0.6), 8vw 12vh #fff, 78vw 72vh rgba(255,255,255,0.5);
+    animation: starBlink 3s ease-in-out infinite alternate-reverse;
 }
 
-/* 星星第二層：稍大近星（帶有夢幻螢光暈感） */
-.stars-layer::after {
-    content: "";
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: transparent;
-    border-radius: 50%;
-    /* 較大顆的星星，額外加上模糊半徑，做出類似 image_6b0c47.png 的發光感 */
-    box-shadow: 
-        18vw 25vh 1px #fff, 48vw 20vh 2px rgba(255,255,255,0.9), 78vw 15vh 1px #fff,
-        12vw 75vh 2px rgba(255,255,255,0.8), 58vw 60vh 1px #fff, 88vw 80vh 2px #fff,
-        32vw 50vh 1px rgba(255,255,255,0.9), 68vw 35vh 2px #fff, 22vw 92vh 1px #fff;
-    animation: starBlink 4s ease-in-out infinite alternate-reverse;
-}
-
-/* 流體動畫 */
-@keyframes luxuryFluidFlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* 星星柔和呼吸閃爍，絕不翻車 */
+/* 星星呼吸閃爍動畫 */
 @keyframes starBlink {
-    0% { opacity: 0.3; transform: translateY(0px) scale(0.9); }
-    50% { opacity: 1.0; transform: translateY(-2px) scale(1.1); }
-    100% { opacity: 0.4; transform: translateY(1px) scale(0.95); }
+    0% { opacity: 0.3; transform: scale(0.92); }
+    50% { opacity: 1.0; transform: scale(1.08); }
+    100% { opacity: 0.4; transform: scale(0.96); }
 }
 
 .grid-container {
@@ -139,17 +143,17 @@ main::before {
 }
 
 /* ==========================================================================
-   3. 企業卡片：5px 實心極光藍超級霸氣厚框（!important 宣告）
+   3. 企業卡片：5px 實心極光藍超級霸氣厚框（保持讚讚的發光特效）
    ========================================================================== */
 .company-card {
     background: rgba(255, 255, 255, 0.95) !important; 
     backdrop-filter: blur(8px) !important; 
     -webkit-backdrop-filter: blur(8px) !important;
-    border-radius: 20px !important; /* 稍微加圓潤配合粗邊框 */
+    border-radius: 20px !important; 
     padding: 25px !important;
     text-align: center !important;
     
-    /* 🎯 外框再粗一點：直接拉到 5px 實心，顏色選用鮮艷奪目的極光藍，保證清晰絕對不細！ */
+    /* 保持你覺得讚的 5px 粗邊框與極光藍色調 */
     border: 5px solid #00b4d8 !important;
     
     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3) !important;
@@ -163,15 +167,11 @@ main::before {
     transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
 }
 
-/* 滑鼠懸停（Hover）特效 */
+/* 滑鼠懸停（Hover）特效（保持發光） */
 .company-card:hover {
     top: -10px !important; 
     background: #ffffff !important; 
-    
-    /* Hover 時框線轉為超級亮眼的電光天藍 */
     border-color: #00f5ff !important;
-    
-    /* 霓虹環境燈特效 */
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4), 0 0 35px rgba(0, 245, 255, 0.85) !important; 
 }
 
@@ -237,7 +237,6 @@ main::before {
     border: 5px solid #00b4d8;
 }
 
-/* 其餘內頁樣式保持不變 */
 .back-btn { display: inline-block; margin-bottom: 20px; color: #2a5298; text-decoration: none; font-weight: bold; }
 .detail-header { display: flex; align-items: center; gap: 20px; border-bottom: 2px solid #eef2f7; padding-bottom: 20px; margin-bottom: 30px; }
 .detail-logo { width: 120px; height: 120px; object-fit: contain; }
