@@ -3,7 +3,6 @@
    ========================================================================== */
 body {
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    /* 🎯 網頁最底層背景色，維持跟以前一樣的溫和淺灰 */
     background-color: #f4f7f6;
     margin: 0;
     padding: 0;
@@ -13,7 +12,6 @@ body {
 header {
     text-align: center;
     padding: 50px 20px 40px 20px;
-    /* 🎯 頂部維持清爽白底，確保雙 Logo 完美清晰 */
     background: linear-gradient(135deg, #ffffff 0%, #f8fbfd 100%);
     color: #333;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); 
@@ -21,7 +19,6 @@ header {
     z-index: 10;
 }
 
-/* 🎯 雙 Logo 完美並排與防爆版設定 */
 .logo-container {
     display: flex;
     justify-content: center;
@@ -44,7 +41,7 @@ header {
 header h1 {
     margin: 0 0 12px 0;
     font-size: 2.6rem;
-    color: #1e3c72; /* 標題維持穩重深藍 */
+    color: #1e3c72; 
     font-weight: 700;
     letter-spacing: 1px;
 }
@@ -55,11 +52,24 @@ header p {
     font-size: 1.05rem;
 }
 
-/* 🎯 關鍵改動：把下方放置卡片的 main 區域整片換成質感深藍色漸層 */
+/* ==========================================================================
+   2. 核心特效：動態流動極光背景 (main)
+   ========================================================================== */
 main {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    min-height: calc(100vh - 250px); /* 確保內容少時也能撐滿畫面 */
-    padding: 50px 20px;
+    /* 🎯 特效：超大尺寸的漸層，搭配動畫做出流動感 */
+    background: linear-gradient(125deg, #122244, #1e3c72, #2a5298, #1a325c, #0f1b35);
+    background-size: 400% 400%;
+    animation: auroraFlow 15s ease infinite; /* 15秒溫和循環流動 */
+    min-height: calc(100vh - 250px); 
+    padding: 60px 20px;
+    position: relative;
+}
+
+/* 🎯 背景流動動畫定義 */
+@keyframes auroraFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .grid-container {
@@ -67,32 +77,48 @@ main {
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-    gap: 30px; 
+    gap: 35px; /* 稍微拉大間距，給發光特效留空間 */
 }
 
 /* ==========================================================================
-   2. 企業卡片樣式優化（維持白色，在藍底上極度亮眼）
+   3. 企業卡片美化：高級質感邊框 + 霓虹發光 Hover 特效
    ========================================================================== */
 .company-card {
-    background-color: white; /* 🎯 卡片維持純白 */
-    border-radius: 12px;
+    background-color: white; 
+    border-radius: 16px; /* 圓角修得更溫潤圓滑 */
     padding: 25px;
     text-align: center;
-    /* 微調陰影，讓白色卡片在深藍背景上更具立體浮空感 */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    
+    /* 🎯 邊框微調：平常是高雅的細銀灰色邊框，防止卡片邊緣死白 */
+    border: 1px solid rgba(30, 60, 114, 0.15);
+    
+    /* 平常的立體陰影 */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    
     display: flex;
     flex-direction: column;
     justify-content: space-between; 
-    height: 300px; 
+    height: 310px; 
     cursor: pointer;
-    transition: all 0.3s ease; 
     position: relative;
     top: 0;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); /* 超流暢動態曲線 */
+    overflow: hidden;
 }
 
+/* 🎯 特效：滑鼠懸停（Hover）時的震撼視覺 */
 .company-card:hover {
-    top: -8px; 
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35); 
+    top: -10px; /* 向上平滑漂浮 */
+    
+    /* 🎯 邊框激發：瞬間變成藍紫色科技感漸層邊框 */
+    border-color: transparent;
+    border: 1px solid #4a00e0;
+    background-image: linear-gradient(white, white), linear-gradient(135deg, #00c6ff 0%, #0072ff 50%, #4a00e0 100%);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    
+    /* 🎯 霓虹環境光暈：在卡片底部散發溫柔的科技藍紫色發光 */
+    box-shadow: 0 20px 40px rgba(0, 114, 255, 0.3), 0 0 15px rgba(74, 0, 224, 0.2); 
 }
 
 /* 🎯 限制 Logo 區域的高度與排版 */
@@ -104,46 +130,60 @@ main {
     justify-content: center;
     margin-bottom: 20px;
     background-color: #ffffff; 
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
     padding: 10px;
     box-sizing: border-box;
+    /* 讓 Logo 區塊有一點點內凹的高級感 */
+    border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
-/* 🎯 終極視覺平衡 */
 .company-logo-img {
     max-width: 75% !important;   
     max-height: 85% !important;  
     width: auto !important;
     height: auto !important;
     object-fit: contain !important;
+    transition: transform 0.4s ease;
+}
+
+/* 滑鼠指到卡片時，Logo 圖片會微微放大，更有互動感 */
+.company-card:hover .company-logo-img {
+    transform: scale(1.05);
 }
 
 .card-title {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     color: #1e3c72;
     margin: 0 0 15px 0;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .card-footer {
     font-size: 0.95rem;
     color: #2a5298;
     font-weight: bold;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid #f5f5f5;
     padding-top: 15px;
+    transition: color 0.3s ease;
+}
+
+/* Hover 時，下方的「查看職缺 →」文字也會變亮藍色 */
+.company-card:hover .card-footer {
+    color: #0072ff;
 }
 
 /* ==========================================================================
-   3. 內頁詳細資訊頁面 (detail.html) 的樣式
+   4. 內頁詳細資訊頁面 (detail.html) 的樣式
    ========================================================================== */
 .detail-container {
     max-width: 800px;
-    margin: 0 auto; /* 配合 main 的 padding */
+    margin: 0 auto; 
     background: white;
     padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .back-btn {
