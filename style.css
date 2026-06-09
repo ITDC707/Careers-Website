@@ -53,7 +53,7 @@ header p {
 }
 
 /* ==========================================================================
-   2. 核心特效：大跨度極光流體 + 滿天白色星星闪烁背景 (main)
+   2. 核心特效：極光流體變色 + 純 CSS 打造「四角十字星芒」璀璨星空 (main)
    ========================================================================== */
 main {
     min-height: calc(100vh - 250px); 
@@ -63,58 +63,65 @@ main {
     z-index: 1;
 }
 
-/* 🎯 特效升級：利用偽元素 ::before 製作純白十字星芒背景，並加上呼吸閃爍動畫 */
+/* 底層動態極光流體變色 */
 main::before {
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     z-index: -1;
-    
-    /* 1. 底層依然是讚讚的流體漸層變色 */
     background: linear-gradient(125deg, #091124, #12254f, #1f4287, #278ea5, #1f4287, #091124);
     background-size: 400% 400%;
-    animation: luxuryFluidFlow 7s ease infinite;
+    animation: luxuryFluidFlow 8s ease infinite;
 }
 
-/* 🎯 專屬星芒層 ::after：利用多重放射漸層手繪出無數個類似 image_6b0c47.png 的白色十字星芒粒子 */
+/* 🎯 救星降臨！利用線性漸層疊加，強行在背景畫出真正的「十字璀璨星芒」粒子群 */
 main::after {
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     z-index: -1;
-    opacity: 0.85;
+    opacity: 0.9;
     
-    /* 在不同座標繪製大小不一的白色四角星芒 */
+    /* 透過水平與垂直的超尖銳漸層，交叉出像 image_6b0c47.png 一樣的實體十字星芒 */
     background-image: 
-        /* 星星 A 群 */
-        radial-gradient(circle at 15% 20%, #ffffff 0%, rgba(255,255,255,0.8) 1px, transparent 4px),
-        radial-gradient(circle at 45% 15%, #ffffff 0%, rgba(255,255,255,0.8) 2px, transparent 6px),
-        radial-gradient(circle at 85% 25%, #ffffff 0%, rgba(255,255,255,0.8) 1px, transparent 5px),
-        /* 星星 B 群 */
-        radial-gradient(circle at 25% 65%, #ffffff 0%, rgba(255,255,255,0.8) 2px, transparent 6px),
-        radial-gradient(circle at 60% 80%, #ffffff 0%, rgba(255,255,255,0.8) 1px, transparent 4px),
-        radial-gradient(circle at 75% 50%, #ffffff 0%, rgba(255,255,255,0.8) 2px, transparent 7px),
-        /* 星星 C 群 */
-        radial-gradient(circle at 35% 40%, #ffffff 0%, rgba(255,255,255,0.8) 1px, transparent 5px),
-        radial-gradient(circle at 90% 75%, #ffffff 0%, rgba(255,255,255,0.8) 2px, transparent 6px);
-        
-    background-size: 100% 100%;
-    /* 🎯 讓整片星空產生慢速的璀璨閃爍、呼吸效果 */
-    animation: starTwinkle 3.5s ease-in-out infinite alternate;
+        /* 巨型星芒 1 (左上) */
+        linear-gradient(90deg, transparent 49.5%, rgba(255,255,255,0.9) 50%, transparent 50.5%),
+        linear-gradient(0deg, transparent 48%, rgba(255,255,255,0.9) 50%, transparent 52%),
+        /* 中型星芒 2 (右上) */
+        linear-gradient(90deg, transparent 79.7%, rgba(255,255,255,0.85) 80%, transparent 80.3%),
+        linear-gradient(0deg, transparent 29%, rgba(255,255,255,0.85) 30%, transparent 31%),
+        /* 中型星芒 3 (左下) */
+        linear-gradient(90deg, transparent 24.7%, rgba(255,255,255,0.85) 25%, transparent 25.3%),
+        linear-gradient(0deg, transparent 69%, rgba(255,255,255,0.85) 70%, transparent 71%),
+        /* 迷你星芒 4 (右下) */
+        linear-gradient(90deg, transparent 84.8%, rgba(255,255,255,0.8) 85%, transparent 85.2%),
+        linear-gradient(0deg, transparent 74%, rgba(255,255,255,0.8) 75%, transparent 76%),
+        /* 迷你星芒 5 (正中下) */
+        linear-gradient(90deg, transparent 49.8%, rgba(255,255,255,0.8) 50%, transparent 50.2%),
+        linear-gradient(0deg, transparent 84%, rgba(255,255,255,0.8) 85%, transparent 86%);
+
+    /* 限制這些星芒線條的擴散範圍，讓它們緊縮成一個個完美的十字星星點 */
+    background-size: 40px 40px, 40px 40px, 30px 30px, 30px 30px, 35px 35px, 35px 35px, 20px 20px, 20px 20px, 25px 25px, 25px 25px;
+    background-repeat: no-repeat;
+    /* 星芒精確位置佈局 */
+    background-position: 15% 20%, 15% 20%, 82% 25%, 82% 25%, 20% 70%, 20% 70%, 88% 75%, 88% 75%, 52% 85%, 52% 85%;
+    
+    /* 🎯 讓星芒產生高質感的動態呼吸閃爍效果 */
+    animation: starTwinkle 4s ease-in-out infinite alternate;
 }
 
-/* 漸層背景變色動畫 */
+/* 漸層流體動畫 */
 @keyframes luxuryFluidFlow {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-/* 星星閃爍呼吸動畫 */
+/* 星芒閃爍動畫 */
 @keyframes starTwinkle {
-    0% { opacity: 0.4; transform: scale(0.98); }
-    50% { opacity: 0.9; transform: scale(1.01); }
-    100% { opacity: 0.5; transform: scale(0.99); }
+    0% { opacity: 0.3; transform: scale(0.95); }
+    50% { opacity: 1.0; transform: scale(1.05); }
+    100% { opacity: 0.4; transform: scale(0.97); }
 }
 
 .grid-container {
@@ -128,40 +135,40 @@ main::after {
 }
 
 /* ==========================================================================
-   3. 企業卡片：2px 科技亮天藍實心外框（加入 !important 終極強制命令）
+   3. 企業卡片：3.5px 實心極光藍加厚框（加入 !important 終極制霸）
    ========================================================================== */
 .company-card {
-    background: rgba(255, 255, 255, 0.94) !important; 
+    background: rgba(255, 255, 255, 0.95) !important; 
     backdrop-filter: blur(8px) !important; 
     -webkit-backdrop-filter: blur(8px) !important;
     border-radius: 18px !important; 
     padding: 25px !important;
     text-align: center !important;
     
-    /* 🎯 終極修正：直接使用 2px 的科技亮天藍色，並加上 !important 宣告，絕對不允許被吃掉！ */
-    border: 2px solid #64b5f6 !important;
+    /* 🎯 框線終極大救星：加厚到 3.5px 實心，顏色改用超漂亮的極光藍，絕對清晰可見！ */
+    border: 3.5px solid #00b4d8 !important;
     
     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3) !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important; 
-    height: 310px !important; 
+    height: 310px; 
     cursor: pointer !important;
     position: relative !important;
     top: 0;
     transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
 }
 
-/* 🎯 滑鼠懸停（Hover）特效 */
+/* 滑鼠懸停（Hover）特效 */
 .company-card:hover {
     top: -10px !important; 
     background: #ffffff !important; 
     
-    /* 🎯 Hover 時外框激發成極致亮藍 */
-    border-color: #00d2ff !important;
+    /* 🎯 Hover 時框線轉為極亮螢光天藍色 */
+    border-color: #00f5ff !important;
     
-    /* 霓虹底盤燈外擴光暈 */
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35), 0 0 25px rgba(0, 210, 255, 0.6) !important; 
+    /* 霓虹光暈外擴強度加倍 */
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 245, 255, 0.7) !important; 
 }
 
 /* 🎯 限制 Logo 區域的高度與排版 */
@@ -210,7 +217,7 @@ main::after {
 }
 
 .company-card:hover .card-footer {
-    color: #00c6ff;
+    color: #00b4d8;
 }
 
 /* ==========================================================================
@@ -223,7 +230,7 @@ main::after {
     padding: 40px;
     border-radius: 18px;
     box-shadow: 0 25px 60px rgba(0,0,0,0.5);
-    border: 2px solid #64b5f6;
+    border: 3.5px solid #00b4d8;
 }
 
 .back-btn {
