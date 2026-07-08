@@ -6,5 +6,6 @@
   { "id": "xac", "name": "同亨科技股份有限公司", "logo": "xac.png" },
   { "id": "jpc", "name": "佳必琪國際股份有限公司", "logo": "jpc.png" },
   { "id": "amkor", "name": "艾克爾國際科技股份有限公司", "logo": "amkor.png" },
-  { "id": "jbjob", "name": "傑報人力資源顧問有限公司", "logo": "jbjob.png" }
+  { "id": "jbjob", "name": "傑報人力資源顧問有限公司", "logo": "jbjob.png" },
+  { "id": "panasonic", "name": "台灣松下電器股份有限公司", "logo": "panasonic.png" }
 ]
